@@ -377,6 +377,11 @@ def inject_css() -> None:
             --violet: #b999ff;
         }
         .stApp { background: var(--bg); color: var(--text); }
+        .block-container {
+            max-width: min(96vw, 1840px) !important;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+        }
         [data-testid="stHeader"] { background: transparent; }
         h1, h2, h3 { letter-spacing: 0; }
         div[data-testid="stMetric"] {
