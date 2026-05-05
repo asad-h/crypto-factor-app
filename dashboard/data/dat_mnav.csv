@@ -1,0 +1,4 @@
+DAT,Metric,mNAV,Source,Source status,Fetch detail,Note
+MSTR,mNAV,1.34,https://www.strategy.com/,Scheduled scrape pending,Use Monday 00:00 GMT scraper; do not block dashboard load.,Strategy blocks simple server-side scraping; browser-rendered scraper likely required.
+BMNR,mNAV,1.02,https://bmnr.rocks/,Scheduled scrape pending,Use Monday 00:00 GMT scraper; do not block dashboard load.,BMNR is client-rendered; scraper should target embedded data or API route.
+PURR,Multiple to Adjusted Net Asset Value,0.94,https://www.hypestrat.xyz/dashboard,Scheduled scrape pending,Use Monday 00:00 GMT scraper; do not block dashboard load.,PURR label is Multiple to Adjusted Net Asset Value.

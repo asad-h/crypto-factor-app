@@ -1,0 +1,22 @@
+.DS_Store
+.env
+.venv/
+__pycache__/
+*.py[cod]
+logs/
+output/
+*.pdf
+defillama-api*.json
+
+# Keep the repo small for Streamlit Cloud. Only the dashboard-ready screener
+# cache is committed so the app has data without needing private API keys.
+cache/*
+!cache/screener/
+cache/screener/*
+!cache/screener/asset_master.parquet
+!cache/screener/coingecko_markets.parquet
+!cache/screener/factor_baskets.parquet
+!cache/screener/factor_scores.parquet
+!cache/screener/project_timeseries.parquet
+!cache/screener/snapshot.parquet
+!cache/screener/summary_timeseries.parquet
