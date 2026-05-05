@@ -13,11 +13,27 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CACHE_DIR = PROJECT_ROOT / "cache"
 CACHE_DIR.mkdir(exist_ok=True)
 
+
+def _get_secret(name: str, default: str = "") -> str:
+    value = os.getenv(name)
+    if value:
+        return value
+    try:
+        import streamlit as st
+
+        value = st.secrets.get(name)
+        if value:
+            return str(value)
+    except Exception:
+        pass
+    return default
+
+
 # ── API keys ───────────────────────────────────────────────────────────
-BLOCKWORKS_API_KEY = os.getenv("BLOCKWORKS_API_KEY", "")
-BLOCKWORKS_BASE_URL = os.getenv("BLOCKWORKS_BASE_URL", "https://api.blockworks.com")
-COINGECKO_API_KEY = os.getenv("COINGECKO_API_KEY") or os.getenv("Coingecko_API_KEY", "")
-COINGECKO_BASE_URL = os.getenv(
+BLOCKWORKS_API_KEY = _get_secret("BLOCKWORKS_API_KEY")
+BLOCKWORKS_BASE_URL = _get_secret("BLOCKWORKS_BASE_URL", "https://api.blockworks.com")
+COINGECKO_API_KEY = _get_secret("COINGECKO_API_KEY") or _get_secret("Coingecko_API_KEY")
+COINGECKO_BASE_URL = _get_secret(
     "COINGECKO_BASE_URL",
     "https://pro-api.coingecko.com/api/v3" if COINGECKO_API_KEY else "https://api.coingecko.com/api/v3",
 )

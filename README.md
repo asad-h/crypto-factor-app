@@ -13,6 +13,14 @@ streamlit run streamlit_app.py
 
 Use `streamlit_app.py` as the app entrypoint. The repo includes the compact `cache/screener` parquet outputs so the dashboard can render immediately on Streamlit Cloud without private API keys.
 
+Add these app-level secrets in Streamlit Cloud under App settings -> Secrets so the live Market Update rebuild button can call the same data sources as the scheduled refresh:
+
+```toml
+BLOCKWORKS_API_KEY = "..."
+BLOCKWORKS_BASE_URL = "https://api.blockworks.com"
+COINGECKO_API_KEY = "..."
+```
+
 ## Daily Data Refresh
 
 GitHub Actions runs `.github/workflows/daily-data-refresh.yml` daily at 03:15 UTC. It refreshes the screener parquet files and Market Update snapshot, commits any changed cache files, and pushes to `main` so Streamlit Cloud redeploys automatically.
