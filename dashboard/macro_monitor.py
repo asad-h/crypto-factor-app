@@ -19,6 +19,8 @@ import plotly.graph_objects as go
 import requests
 import streamlit as st
 
+from crypto_factor_model.config import COINGECKO_API_KEY, COINGECKO_BASE_URL
+
 try:
     import yfinance as yf
 except ImportError:  # pragma: no cover - optional runtime dependency
@@ -33,7 +35,7 @@ MARKET_UPDATE_MAX_AGE_HOURS = 30
 
 FRED_ENDPOINT = "https://api.stlouisfed.org/fred/series/observations"
 DEFAULT_FRED_API_KEY = "REDACTED_FRED_API_KEY"
-COINGECKO_GLOBAL_ENDPOINT = "https://api.coingecko.com/api/v3/global"
+COINGECKO_GLOBAL_ENDPOINT = f"{COINGECKO_BASE_URL.rstrip('/')}/global"
 CMC_CYCLE_URL = "https://coinmarketcap.com/charts/crypto-market-cycle-indicators/"
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers_exchange.json"
 SEC_SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik:010d}.json"
@@ -48,6 +50,7 @@ REQUEST_HEADERS = {
     "User-Agent": "CryptoFactorModel/1.0 (+local dashboard)",
     "Accept": "application/json,text/html;q=0.9,*/*;q=0.8",
 }
+COINGECKO_HEADERS = {**REQUEST_HEADERS, "x-cg-pro-api-key": COINGECKO_API_KEY} if COINGECKO_API_KEY else REQUEST_HEADERS
 
 SEC_HEADERS = {
     "User-Agent": SEC_USER_AGENT,
@@ -332,8 +335,14 @@ def _canonical_chain_name(name: Any) -> str:
     return CHAIN_NAME_OVERRIDES.get(text.lower(), text[:1].upper() + text[1:])
 
 
-def _requests_json(url: str, *, params: dict[str, Any] | None = None, timeout: int = 15) -> Any:
-    resp = requests.get(url, params=params, headers=REQUEST_HEADERS, timeout=timeout)
+def _requests_json(
+    url: str,
+    *,
+    params: dict[str, Any] | None = None,
+    timeout: int = 15,
+    headers: dict[str, str] | None = None,
+) -> Any:
+    resp = requests.get(url, params=params, headers=headers or REQUEST_HEADERS, timeout=timeout)
     resp.raise_for_status()
     return resp.json()
 
@@ -538,11 +547,11 @@ def load_market_structure() -> tuple[dict[str, Any], list[str]]:
         errors.append("ETH/BTC unavailable")
 
     try:
-        payload = _requests_json(COINGECKO_GLOBAL_ENDPOINT, timeout=12)
+        payload = _requests_json(COINGECKO_GLOBAL_ENDPOINT, timeout=12, headers=COINGECKO_HEADERS)
         percentages = payload.get("data", {}).get("market_cap_percentage", {})
         rows["btc_d"] = _num(percentages.get("btc"))
         rows["eth_d"] = _num(percentages.get("eth"))
-        rows["btc_d_source"] = "CoinGecko free global endpoint"
+        rows["btc_d_source"] = "CoinGecko Pro global endpoint" if COINGECKO_API_KEY else "CoinGecko free global endpoint"
     except Exception as exc:
         errors.append(f"BTC.D unavailable: {exc}")
 
