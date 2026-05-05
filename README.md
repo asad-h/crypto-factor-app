@@ -19,6 +19,8 @@ Add these app-level secrets in Streamlit Cloud under App settings -> Secrets so 
 BLOCKWORKS_API_KEY = "..."
 BLOCKWORKS_BASE_URL = "https://api.blockworks.com"
 COINGECKO_API_KEY = "..."
+FRED_API_KEY = "..."
+SEC_USER_AGENT = "CryptoFactorModel/1.0 your-email@example.com"
 ```
 
 ## Daily Data Refresh
@@ -35,5 +37,5 @@ Recommended GitHub repo secret:
 
 Optional GitHub repo secrets:
 
-- `FRED_API_KEY`: macro data; the app has a default fallback key.
+- `FRED_API_KEY`: macro data from FRED.
 - `SEC_USER_AGENT`: SEC filing fetches in Market Update.

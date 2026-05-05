@@ -19,7 +19,7 @@ import plotly.graph_objects as go
 import requests
 import streamlit as st
 
-from crypto_factor_model.config import COINGECKO_API_KEY, COINGECKO_BASE_URL
+from crypto_factor_model.config import COINGECKO_API_KEY, COINGECKO_BASE_URL, FRED_API_KEY, SEC_USER_AGENT
 
 try:
     import yfinance as yf
@@ -34,14 +34,12 @@ MARKET_UPDATE_SNAPSHOT_PATH = MARKET_UPDATE_CACHE_DIR / "latest.pkl"
 MARKET_UPDATE_MAX_AGE_HOURS = 30
 
 FRED_ENDPOINT = "https://api.stlouisfed.org/fred/series/observations"
-DEFAULT_FRED_API_KEY = "REDACTED_FRED_API_KEY"
 COINGECKO_GLOBAL_ENDPOINT = f"{COINGECKO_BASE_URL.rstrip('/')}/global"
 CMC_CYCLE_URL = "https://coinmarketcap.com/charts/crypto-market-cycle-indicators/"
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers_exchange.json"
 SEC_SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik:010d}.json"
 SEC_COMPANY_CONCEPT_URL = "https://data.sec.gov/api/xbrl/companyconcept/CIK{cik:010d}/us-gaap/{tag}.json"
 SEC_ARCHIVES_BASE_URL = "https://www.sec.gov/Archives/edgar/data"
-SEC_USER_AGENT = os.getenv("SEC_USER_AGENT", "CryptoFactorModel/1.0 asad.hussain@example.com")
 SEC_REQUEST_TIMEOUT_SECONDS = 30
 SEC_REQUEST_RETRIES = 2
 BITCOIN_COM_CHARTS_BASE_URL = "https://charts.bitcoin.com/api/v1/charts"
@@ -243,16 +241,8 @@ CHAIN_NAME_OVERRIDES = {
 
 
 def _fred_api_key() -> str:
-    """Prefer env/secrets, falling back to the key supplied for this local app."""
-    if os.getenv("FRED_API_KEY"):
-        return str(os.environ["FRED_API_KEY"])
-    try:
-        secret = st.secrets.get("FRED_API_KEY")
-        if secret:
-            return str(secret)
-    except Exception:
-        pass
-    return DEFAULT_FRED_API_KEY
+    """Return the FRED key supplied through env vars or Streamlit secrets."""
+    return FRED_API_KEY
 
 
 def _parse_value(value: Any) -> float:
