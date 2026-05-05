@@ -13,6 +13,9 @@ defillama-api*.json
 cache/*
 !cache/screener/
 cache/screener/*
+!cache/market_update/
+cache/market_update/*
+!cache/market_update/latest.pkl
 !cache/screener/asset_master.parquet
 !cache/screener/coingecko_markets.parquet
 !cache/screener/factor_baskets.parquet
