@@ -1951,13 +1951,21 @@ def render_screener_table(filtered: pd.DataFrame) -> None:
         ]
         if label in display
     ]
-    for original_col in USD_COLUMNS:
-        label = SCREENER_COLUMNS.get(original_col)
-        if label in display:
-            display[label] = filtered[original_col].map(compact_usd)
-
-    formatters = {label: format_number for label in score_labels}
+    formatters = {label: compact_usd for label in usd_labels}
+    formatters.update({label: format_number for label in score_labels})
     formatters.update({label: format_pct for label in pct_labels})
+    column_config = {
+        col: st.column_config.TextColumn(col, width="large")
+        for col in SIGNAL_DETAIL_COLUMNS
+        if col in display
+    }
+    column_config.update(
+        {
+            col: st.column_config.NumberColumn(col, width="small")
+            for col in usd_labels
+            if col in display
+        }
+    )
     styled = (
         display.style
         .format(formatters, na_rep="n/a")
@@ -1975,11 +1983,7 @@ def render_screener_table(filtered: pd.DataFrame) -> None:
         hide_index=True,
         width="stretch",
         height=min(620, 90 + len(filtered) * 36),
-        column_config={
-            col: st.column_config.TextColumn(col, width="large")
-            for col in SIGNAL_DETAIL_COLUMNS
-            if col in display
-        },
+        column_config=column_config,
     )
 
 
