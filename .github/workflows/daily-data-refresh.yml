@@ -21,6 +21,7 @@ jobs:
       BLOCKWORKS_BASE_URL: ${{ secrets.BLOCKWORKS_BASE_URL || 'https://api.blockworks.com' }}
       COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
       FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+      NANSEN_API_KEY: ${{ secrets.NANSEN_API_KEY }}
       SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT || 'CryptoFactorModel/1.0 github-actions@users.noreply.github.com' }}
       SCREENER_FORCE_RAW_SOURCE_REFRESH: "true"
 

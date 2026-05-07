@@ -13,6 +13,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date, timedelta
 from pathlib import Path
+import os
 import sys
 from typing import Any
 
@@ -40,6 +41,17 @@ from dashboard.screener_data import (
     load_summary_timeseries,
 )
 from dashboard.macro_monitor import render_macro_monitor
+from dashboard.project_events import (
+    HYPERLIQUID_STAKING_DOCS_URL,
+    HYPURRSCAN_UNSTAKING_URL,
+    NANSEN_ENDPOINTS,
+    compute_rolling_30d_return_correlations,
+    fetch_defillama_unlock_events,
+    fetch_nansen_token_context,
+    fetch_snapshot_governance_events,
+    hyperliquid_unstaking_context,
+    source_config_for_project,
+)
 from crypto_factor_model.config import FAMILY_WEIGHTS
 
 
@@ -254,6 +266,18 @@ FILTERED_UNIVERSE_METRICS = {
     "open_interest": ("Open Interest", "usd"),
     "volume_24h": ("Volume USD", "usd"),
 }
+
+PEER_KPI_METRICS = {
+    "revenue_30d": "Revenue",
+    "fees_30d": "Fees",
+    "tvl": "TVL",
+    "deposits": "Deposits",
+    "open_interest": "Open interest",
+    "volume_24h": "Volume",
+    "price": "Price",
+}
+
+DEFAULT_CORRELATION_BENCHMARKS = ["BTC", "ETH", "SOL", "HYPE"]
 
 SCREENER_COLUMNS = {
     "ticker": "Ticker",
@@ -667,6 +691,19 @@ def _load_cached_factor_scores(cache_signature: tuple[tuple[str, int], ...]) -> 
         return pd.DataFrame()
 
 
+@st.cache_data(show_spinner=False)
+def _load_cached_full_project_timeseries(cache_signature: tuple[tuple[str, int], ...]) -> pd.DataFrame:
+    try:
+        if PROJECT_TS_PATH.exists():
+            ts = pd.read_parquet(PROJECT_TS_PATH)
+            if not ts.empty:
+                ts["date"] = pd.to_datetime(ts["date"], errors="coerce")
+                return ts.sort_values(["ticker", "date"]).reset_index(drop=True)
+    except Exception:
+        pass
+    return pd.DataFrame()
+
+
 def load_projects() -> pd.DataFrame:
     return _load_projects_cached(screener_cache_signature())
 
@@ -685,6 +722,10 @@ def load_cached_factor_baskets() -> pd.DataFrame:
 
 def load_cached_factor_scores() -> pd.DataFrame:
     return _load_cached_factor_scores(screener_cache_signature())
+
+
+def load_cached_full_project_timeseries() -> pd.DataFrame:
+    return _load_cached_full_project_timeseries(screener_cache_signature())
 
 
 @st.cache_data(show_spinner=False)
@@ -1392,6 +1433,115 @@ def render_filtered_universe_evolution(df: pd.DataFrame, title: str, key: str) -
         st.plotly_chart(bucket_fig, width="stretch", key=f"{key}_top100_30d_distribution_fdv")
 
 
+def build_peer_kpi_growth_frame(df: pd.DataFrame, tickers: list[str], metric: str) -> pd.DataFrame:
+    tickers = [str(ticker).upper() for ticker in tickers if str(ticker).strip()]
+    if not tickers or metric not in PEER_KPI_METRICS:
+        return pd.DataFrame()
+
+    real = load_cached_full_project_timeseries()
+    if not real.empty and {"date", "ticker", metric}.issubset(real.columns):
+        base = real[real["ticker"].astype(str).str.upper().isin(tickers)][["date", "ticker", "project", metric]].copy()
+    else:
+        rows = []
+        for _, project in df[df["ticker"].astype(str).str.upper().isin(tickers)].iterrows():
+            project_ts = build_project_actual_timeseries(project)
+            if project_ts.empty or metric not in project_ts:
+                continue
+            project_rows = project_ts[["date", metric]].copy()
+            project_rows["ticker"] = str(project["ticker"]).upper()
+            project_rows["project"] = project.get("project", project["ticker"])
+            rows.append(project_rows)
+        base = pd.concat(rows, ignore_index=True) if rows else pd.DataFrame()
+
+    if base.empty:
+        return pd.DataFrame()
+
+    base = base.rename(columns={metric: "raw_value"}).copy()
+    base["date"] = pd.to_datetime(base["date"], errors="coerce")
+    base["ticker"] = base["ticker"].astype(str).str.upper()
+    base["raw_value"] = pd.to_numeric(base["raw_value"], errors="coerce")
+    base = base.dropna(subset=["date", "ticker", "raw_value"]).sort_values(["ticker", "date"])
+    if base.empty:
+        return pd.DataFrame()
+
+    first_dates = base.groupby("ticker", observed=True)["date"].min()
+    if first_dates.empty:
+        return pd.DataFrame()
+    common_start = first_dates.max()
+    base = base[base["date"] >= common_start].copy()
+
+    frames = []
+    for ticker, group in base.groupby("ticker", observed=True):
+        group = group.sort_values("date").copy()
+        first = group["raw_value"].dropna().iloc[0] if group["raw_value"].notna().any() else float("nan")
+        if pd.isna(first) or abs(float(first)) <= 1e-12:
+            continue
+        group["Indexed"] = group["raw_value"] / float(first) * 100
+        frames.append(group)
+    if not frames:
+        return pd.DataFrame()
+    return pd.concat(frames, ignore_index=True)
+
+
+def render_peer_kpi_growth(df: pd.DataFrame) -> None:
+    st.subheader("Peer KPI Growth")
+    if df.empty:
+        st.info("No projects are available after the current filters.")
+        return
+
+    eligible_tickers = df["ticker"].dropna().astype(str).str.upper().drop_duplicates().tolist()
+    if not eligible_tickers:
+        st.info("No tickers are available after the current filters.")
+        return
+    ranked = df.copy()
+    if "factor_score" in ranked:
+        ranked = ranked.sort_values("factor_score", ascending=False, na_position="last")
+    default_tickers = ranked["ticker"].dropna().astype(str).str.upper().drop_duplicates().head(min(5, len(eligible_tickers))).tolist()
+
+    c1, c2 = st.columns([1, 2])
+    metric = c1.selectbox(
+        "KPI",
+        options=list(PEER_KPI_METRICS),
+        format_func=PEER_KPI_METRICS.get,
+        key="peer_kpi_growth_metric",
+    )
+    selected_tickers = c2.multiselect(
+        "Tokens",
+        options=eligible_tickers,
+        default=default_tickers,
+        key="peer_kpi_growth_tickers",
+    )
+    plot_df = build_peer_kpi_growth_frame(df, selected_tickers, metric)
+    if plot_df.empty:
+        st.info("No eligible time series for the selected KPI and tokens.")
+        return
+
+    fig = px.line(
+        plot_df,
+        x="date",
+        y="Indexed",
+        color="ticker",
+        hover_name="project",
+        hover_data={"raw_value": ":,.2f", "Indexed": ":.1f", "ticker": False},
+        color_discrete_sequence=["#8eed8a", "#68d5cb", "#73a8ff", "#b999ff", "#f2c15e", "#ff746d"],
+    )
+    fig.update_traces(line=dict(width=2.3))
+    fig.update_layout(
+        title=f"{PEER_KPI_METRICS[metric]} Indexed Peer Growth",
+        template="plotly_dark",
+        height=420,
+        xaxis_title=None,
+        yaxis_title="Indexed to 100",
+        margin=dict(l=10, r=20, t=42, b=20),
+        paper_bgcolor="#121410",
+        plot_bgcolor="#121410",
+        hovermode="x unified",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
+    )
+    add_indexed_100_bands(fig, plot_df["Indexed"])
+    st.plotly_chart(fig, width="stretch", key=f"peer_kpi_growth_{metric}_{'_'.join(selected_tickers)}")
+
+
 def render_wow_distribution_by_category(df: pd.DataFrame) -> None:
     st.subheader("WoW Change Distribution by Category")
     metric_options = {
@@ -1910,6 +2060,7 @@ def render_screener(df: pd.DataFrame) -> pd.DataFrame:
     )
     filtered = filter_projects(df)
     render_filtered_universe_evolution(filtered, "30D Filtered Universe Evolution", "screener_filtered_universe")
+    render_peer_kpi_growth(filtered)
     return filtered
 
 
@@ -2362,6 +2513,225 @@ def render_project_peer_position(df: pd.DataFrame, selected_ticker: str) -> None
             st.plotly_chart(fig, width="stretch", key=f"fdv_raw_position_{selected_ticker}_{metric}")
 
 
+@st.cache_data(ttl=6 * 3600, show_spinner=False)
+def _load_project_unlock_events_cached(slug: str, project: str, ticker: str, source_url: str) -> pd.DataFrame:
+    return fetch_defillama_unlock_events(slug, project=project, ticker=ticker, source_url=source_url)
+
+
+@st.cache_data(ttl=6 * 3600, show_spinner=False)
+def _load_snapshot_governance_cached(
+    space_id: str,
+    project: str,
+    ticker: str,
+    defillama_slug: str,
+    governance_url: str,
+) -> pd.DataFrame:
+    return fetch_snapshot_governance_events(
+        space_id,
+        project=project,
+        ticker=ticker,
+        defillama_slug=defillama_slug,
+        governance_url=governance_url,
+    )
+
+
+def render_project_unlocks(row: pd.Series) -> None:
+    st.subheader("Emissions and Unlocks")
+    config = source_config_for_project(row)
+    slug = str(config.get("defillama_slug") or row.get("defillama_slug") or "").strip()
+    source_url = str(config.get("unlock_url") or row.get("defillama_unlocks_url") or "")
+    if not slug or not source_url:
+        st.info("No DefiLlama unlock source is configured for this project.")
+        return
+
+    events = _load_project_unlock_events_cached(slug, str(row["project"]), str(row["ticker"]), source_url)
+    if events.empty:
+        st.info("No parsable unlock events are available from the public DefiLlama page. The source link is still available for manual review.")
+        st.markdown(f"[Open DefiLlama unlocks]({source_url})")
+        return
+
+    today = pd.Timestamp.today().normalize()
+    upcoming = events[pd.to_datetime(events["date"], errors="coerce") >= today].sort_values("date")
+    potential = upcoming[upcoming["bucket"].eq("Potential Selling")]
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Upcoming Unlocks", str(len(upcoming)))
+    c2.metric("Potential Selling Value", compact_usd(potential["value_usd"].dropna().sum() if not potential.empty else pd.NA))
+    c3.metric("Next Unlock", upcoming["date"].dt.strftime("%Y-%m-%d").iloc[0] if not upcoming.empty else "n/a")
+
+    display = events.copy()
+    display["Date"] = pd.to_datetime(display["date"], errors="coerce").dt.strftime("%Y-%m-%d")
+    display = display.rename(
+        columns={
+            "recipient": "Recipient",
+            "bucket": "Bucket",
+            "token_amount": "Token Amount",
+            "token_symbol": "Token",
+            "value_usd": "USD Value",
+            "pct_supply": "% Supply",
+            "pct_float": "% Float",
+            "notes": "Notes",
+            "source_url": "Source URL",
+        }
+    )
+    display_cols = ["Date", "Recipient", "Bucket", "Token Amount", "Token", "USD Value", "% Supply", "% Float", "Notes", "Source URL"]
+    st.dataframe(
+        display[[col for col in display_cols if col in display]],
+        hide_index=True,
+        width="stretch",
+        column_config={
+            "Token Amount": st.column_config.NumberColumn("Token Amount", format="%.0f"),
+            "USD Value": st.column_config.NumberColumn("USD Value", format="$%.2f"),
+            "% Supply": st.column_config.NumberColumn("% Supply", format="%.3f%%"),
+            "% Float": st.column_config.NumberColumn("% Float", format="%.3f%%"),
+            "Source URL": st.column_config.LinkColumn("Source URL"),
+        },
+    )
+
+
+def render_project_unstaking_flows(row: pd.Series) -> None:
+    config = source_config_for_project(row)
+    if str(config.get("flow_adapter", "")).lower() != "hyperliquid" and str(row.get("ticker", "")).upper() != "HYPE":
+        return
+
+    st.subheader("Flows: Staking and Unstaking")
+    events = hyperliquid_unstaking_context(str(row.get("project", "Hyperliquid")), str(row.get("ticker", "HYPE")))
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Delegation Lock", "1 day")
+    c2.metric("Unstaking Queue", "7 days")
+    c3.metric("Pending Withdrawals", "Max 5/address")
+    st.caption(
+        "Live Hypurrscan queue parsing is source-dependent; mechanics are shown from the official Hyperliquid staking docs."
+    )
+    display = events.rename(columns={"title": "Item", "notes": "Detail", "source_url": "Source URL"})
+    st.dataframe(
+        display[["Item", "Detail", "Source URL"]],
+        hide_index=True,
+        width="stretch",
+        column_config={"Source URL": st.column_config.LinkColumn("Source URL")},
+    )
+    st.markdown(f"[Hypurrscan unstaking]({HYPURRSCAN_UNSTAKING_URL}) · [Hyperliquid staking docs]({HYPERLIQUID_STAKING_DOCS_URL})")
+
+
+def render_project_governance(row: pd.Series) -> None:
+    st.subheader("Governance")
+    config = source_config_for_project(row)
+    slug = str(config.get("defillama_slug") or row.get("defillama_slug") or "").strip()
+    governance_url = str(config.get("governance_url") or (f"https://defillama.com/governance/{slug}" if slug else ""))
+    space_id = str(config.get("snapshot_space") or "").strip()
+    if not governance_url:
+        st.info("No governance source is configured for this project.")
+        return
+
+    proposals = _load_snapshot_governance_cached(
+        space_id,
+        str(row["project"]),
+        str(row["ticker"]),
+        slug,
+        governance_url,
+    ) if space_id else pd.DataFrame()
+
+    if proposals.empty:
+        detail = "No configured Snapshot space or no recent Snapshot proposals were available."
+        st.info(f"{detail} Use the DefiLlama governance source for manual review.")
+        st.markdown(f"[Open DefiLlama governance]({governance_url})")
+        return
+
+    active = proposals[proposals["state"].astype(str).str.lower().isin(["active", "pending"])]
+    closed = proposals[proposals["state"].astype(str).str.lower().eq("closed")]
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Active / Pending", str(len(active)))
+    c2.metric("Recent Closed", str(len(closed)))
+    c3.metric("Snapshot Space", space_id)
+    display = proposals.copy()
+    display["Start"] = pd.to_datetime(display["date"], errors="coerce").dt.strftime("%Y-%m-%d")
+    display["End"] = pd.to_datetime(display["end_date"], errors="coerce").dt.strftime("%Y-%m-%d")
+    display = display.rename(columns={"title": "Proposal", "state": "State", "value_usd": "Votes", "source_url": "Source URL"})
+    st.dataframe(
+        display[["Start", "End", "State", "Proposal", "Votes", "Source URL"]],
+        hide_index=True,
+        width="stretch",
+        column_config={
+            "Votes": st.column_config.NumberColumn("Votes", format="%.0f"),
+            "Source URL": st.column_config.LinkColumn("Source URL"),
+        },
+    )
+    st.markdown(f"[Open DefiLlama governance]({governance_url})")
+
+
+def render_project_nansen_context(row: pd.Series) -> None:
+    with st.expander("Nansen Flow Context", expanded=False):
+        config = source_config_for_project(row)
+        chain = str(config.get("nansen_chain") or "").lower()
+        token_address = str(config.get("nansen_token_address") or "").strip()
+        endpoint_rows = [
+            {"Use": name.replace("_", " ").title(), "Endpoint": endpoint}
+            for name, endpoint in NANSEN_ENDPOINTS.items()
+            if name in {
+                "token_information",
+                "indicators",
+                "token_ohlcv",
+                "holders",
+                "flow_intelligence",
+                "flows",
+                "who_bought_sold",
+                "dex_trades",
+                "transfers",
+                "pnl_leaderboard",
+            }
+        ]
+        st.dataframe(pd.DataFrame(endpoint_rows), hide_index=True, width="stretch")
+        if not os.getenv("NANSEN_API_KEY"):
+            st.info("Set `NANSEN_API_KEY` to enable live Nansen enrichment. The dashboard will continue without it.")
+            return
+        if not chain or not token_address:
+            st.info(
+                f"Set `NANSEN_{str(row['ticker']).upper()}_TOKEN_ADDRESS` to enable token-specific Nansen calls for this project."
+            )
+            return
+        if st.button("Fetch Nansen context", key=f"fetch_nansen_context_{row['ticker']}"):
+            with st.spinner("Fetching Nansen context..."):
+                context = fetch_nansen_token_context(chain, token_address)
+            if context.empty:
+                st.info("Nansen returned no context for this token.")
+            else:
+                st.dataframe(context, hide_index=True, width="stretch")
+
+
+def render_project_correlation_table(df: pd.DataFrame, selected_ticker: str) -> None:
+    st.subheader("30D Price-Change Correlation")
+    full_ts = load_cached_full_project_timeseries()
+    if full_ts.empty:
+        st.info("Full project price history is unavailable for correlation analysis.")
+        return
+
+    options = sorted(
+        ticker
+        for ticker in df["ticker"].dropna().astype(str).str.upper().unique().tolist()
+        if ticker not in set(DEFAULT_CORRELATION_BENCHMARKS + [str(selected_ticker).upper()])
+    )
+    extras = st.multiselect(
+        "Additional benchmarks",
+        options=options,
+        default=[],
+        key=f"correlation_extra_benchmarks_{selected_ticker}",
+    )
+    benchmarks = [*DEFAULT_CORRELATION_BENCHMARKS, *extras]
+    correlations = compute_rolling_30d_return_correlations(full_ts, selected_ticker, benchmarks)
+    if correlations.empty:
+        st.info("No eligible price history for the selected asset and benchmarks.")
+        return
+    st.dataframe(
+        correlations,
+        hide_index=True,
+        width="stretch",
+        column_config={
+            "Correlation": st.column_config.NumberColumn("Correlation", format="%.2f"),
+            "Selected 30D Return": st.column_config.NumberColumn("Selected 30D Return", format="%.1f%%"),
+            "Benchmark 30D Return": st.column_config.NumberColumn("Benchmark 30D Return", format="%.1f%%"),
+        },
+    )
+
+
 def render_project_detail(df: pd.DataFrame) -> str:
     default_index = int(df.index[df["ticker"] == st.session_state.get("project_detail_selected", "UNI")][0]) if st.session_state.get("project_detail_selected", "UNI") in df["ticker"].values else 0
     selected_ticker = st.selectbox(
@@ -2393,6 +2763,11 @@ def render_project_detail(df: pd.DataFrame) -> str:
     r4.metric("Factor Score", f"{row['factor_score']:+.2f}", delta=f"4W {row['factor_4w_change']:+.2f}")
 
     render_project_actual_timeseries(row)
+    render_project_correlation_table(df, selected_ticker)
+    render_project_unlocks(row)
+    render_project_unstaking_flows(row)
+    render_project_governance(row)
+    render_project_nansen_context(row)
     render_project_peer_position(df, selected_ticker)
     return selected_ticker
 
@@ -2901,7 +3276,7 @@ def main() -> None:
             "Project Detail",
             "Factor Screener",
             "Signal Detail",
-            "Market Update",
+            "Macro Signals",
             "Data Quality",
             "Data Dictionary",
         ]

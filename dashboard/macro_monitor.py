@@ -1646,7 +1646,7 @@ def _snapshot_age_hours(snapshot: dict[str, Any]) -> float | None:
 
 
 def build_market_update_snapshot() -> dict[str, Any]:
-    """Build the daily Market Update snapshot from current public/live sources."""
+    """Build the daily Macro Signals snapshot from current public/live sources."""
     MARKET_UPDATE_CACHE_DIR.mkdir(parents=True, exist_ok=True)
     clear_market_update_live_caches()
     errors: list[str] = []
@@ -1709,15 +1709,15 @@ def build_market_update_snapshot() -> dict[str, Any]:
 def load_market_update_snapshot(cache_signature: int) -> tuple[dict[str, Any] | None, str | None]:
     del cache_signature
     if not MARKET_UPDATE_SNAPSHOT_PATH.exists():
-        return None, f"Missing Market Update snapshot: {MARKET_UPDATE_SNAPSHOT_PATH}"
+        return None, f"Missing Macro Signals snapshot: {MARKET_UPDATE_SNAPSHOT_PATH}"
     try:
         with open(MARKET_UPDATE_SNAPSHOT_PATH, "rb") as f:
             snapshot = pickle.load(f)
         if not isinstance(snapshot, dict):
-            return None, "Market Update snapshot is not a valid dictionary."
+            return None, "Macro Signals snapshot is not a valid dictionary."
         return snapshot, None
     except Exception as exc:
-        return None, f"Could not load Market Update snapshot: {exc}"
+        return None, f"Could not load Macro Signals snapshot: {exc}"
 
 
 def _style_plotly(fig: go.Figure, height: int = 360, showlegend: bool = True) -> go.Figure:
@@ -2294,7 +2294,7 @@ def _render_defillama_flow_charts(
                 ),
                 width="stretch",
             )
-    st.caption("Fees, bridge flows, and stablecoin changes are loaded from the daily Market Update snapshot.")
+    st.caption("Fees, bridge flows, and stablecoin changes are loaded from the daily Macro Signals snapshot.")
 
 
 def _render_cycle_indicators(cycle: pd.DataFrame | None = None) -> None:
@@ -2309,10 +2309,10 @@ def _render_cycle_indicators(cycle: pd.DataFrame | None = None) -> None:
 
 
 def render_macro_monitor() -> None:
-    """Render the Market Update tab."""
+    """Render the Macro Signals tab."""
     header, reload_col, rebuild_col = st.columns([4, 1, 1])
     header.markdown(
-        '<div class="hero-card"><h3>Market Update</h3>'
+        '<div class="hero-card"><h3>Macro Signals</h3>'
         "<p>Daily cached macro, crypto market structure, token movers, equities, cycle indicators, and on-chain flows.</p></div>",
         unsafe_allow_html=True,
     )
@@ -2320,7 +2320,7 @@ def render_macro_monitor() -> None:
         load_market_update_snapshot.clear()
         st.rerun()
     if rebuild_col.button("Rebuild now", key="macro_monitor_rebuild"):
-        with st.spinner("Building Market Update snapshot..."):
+        with st.spinner("Building Macro Signals snapshot..."):
             build_market_update_snapshot()
         load_market_update_snapshot.clear()
         st.rerun()
@@ -2331,13 +2331,13 @@ def render_macro_monitor() -> None:
         st.info("Run `scripts/refresh_market_update_cache.py` to create the daily snapshot.")
         return
     if snapshot is None:
-        st.warning("No Market Update snapshot is available.")
+        st.warning("No Macro Signals snapshot is available.")
         return
 
     snapshot_created_at = _snapshot_created_at(snapshot)
     snapshot_age = _snapshot_age_hours(snapshot)
     if snapshot_created_at is None:
-        st.error("Market Update snapshot has no valid creation timestamp. Rebuild the snapshot before using this tab.")
+        st.error("Macro Signals snapshot has no valid creation timestamp. Rebuild the snapshot before using this tab.")
         return
     st.caption(
         f"Snapshot built {snapshot_created_at.strftime('%Y-%m-%d %H:%M:%S UTC')} "
@@ -2345,7 +2345,7 @@ def render_macro_monitor() -> None:
     )
     if snapshot_age is not None and snapshot_age > MARKET_UPDATE_MAX_AGE_HOURS:
         st.error(
-            f"Market Update snapshot is stale ({snapshot_age:.1f}h old). "
+            f"Macro Signals snapshot is stale ({snapshot_age:.1f}h old). "
             "Rebuild the snapshot before relying on this tab."
         )
         return

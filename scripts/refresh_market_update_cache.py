@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Refresh the daily Market Update snapshot used by the Streamlit dashboard."""
+"""Refresh the daily Macro Signals snapshot used by the Streamlit dashboard."""
 from __future__ import annotations
 
 import sys
