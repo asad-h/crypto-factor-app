@@ -1,0 +1,86 @@
+{
+  "selected_model": "learned_global",
+  "selected_variant": "sticky_l_s",
+  "selected_eligible_universe": "eligible_sensitivity",
+  "primary_horizon": 14,
+  "selection_status": "NO_STRICT_PASS",
+  "strict_gate_passed": false,
+  "final_recommendation": "No model selected; reporting basket is diagnostic only",
+  "selection_reason": "No L/S candidate cleared the positive validation and rolling-fold gates; selected the best L/S row for basket reporting only, not as a strategy recommendation.",
+  "weights": {
+    "current_no_team": {
+      "fundamentals": 0.6470588235294118,
+      "momentum": 0.20588235294117643,
+      "flows": 0.14705882352941174,
+      "factor_improvement": 0.0
+    },
+    "equal_family": {
+      "fundamentals": 0.25,
+      "momentum": 0.25,
+      "flows": 0.25,
+      "factor_improvement": 0.25
+    },
+    "heuristic": {
+      "fundamentals": 0.25,
+      "momentum": 0.4,
+      "flows": 0.25,
+      "factor_improvement": 0.1
+    },
+    "learned_global": {
+      "fundamentals": 0.55,
+      "momentum": 0.45,
+      "flows": 0.0,
+      "factor_improvement": 0.0
+    },
+    "learned_bullish": {
+      "fundamentals": 0.55,
+      "momentum": 0.45,
+      "flows": 0.0,
+      "factor_improvement": 0.0
+    },
+    "learned_bearish": {
+      "fundamentals": 0.30000000000000004,
+      "momentum": 0.5,
+      "flows": 0.15000000000000002,
+      "factor_improvement": 0.05
+    }
+  },
+  "validation_row": {
+    "model": "learned_global",
+    "variant": "sticky_l_s",
+    "horizon": 14,
+    "period": "Validation",
+    "eligible_universe": "eligible_sensitivity",
+    "n_rebalances": 13,
+    "total_return": -0.04841847900976337,
+    "annualized_return": -0.09473949974603746,
+    "annualized_vol": 0.40742608376630446,
+    "sharpe": -0.04266300374670458,
+    "sortino": -0.049130254446643,
+    "max_drawdown": -0.2659672389843388,
+    "calmar": -0.3562074039939035,
+    "hit_rate": 0.6153846153846154,
+    "avg_turnover": 0.6769230769230768,
+    "total_cost": 0.044000000000000004,
+    "btc_total_return": 0.1312957529760912,
+    "excess_return": -0.17971423198585457,
+    "beta": -0.645598603718396,
+    "alpha": 0.0864786545809236,
+    "information_ratio": -0.5164517891144484,
+    "correlation": -0.42541866566956177,
+    "up_capture": -0.5608569258911887,
+    "down_capture": -0.9384437066242378,
+    "drawdown_vs_btc": -0.13670223473013354,
+    "rolling_folds": 4.0,
+    "rolling_positive_folds": 1.0,
+    "rolling_avg_total_return": -0.08988274619514972,
+    "rolling_min_total_return": -0.21895875541403398,
+    "rolling_avg_sharpe": -0.5522918514577054,
+    "is_l_s_candidate": true,
+    "is_directional_candidate": false,
+    "passes_validation_gate": false,
+    "passes_rolling_gate": false,
+    "passes_strict_gate": false,
+    "selection_score": -0.26239796661086107
+  }
+}

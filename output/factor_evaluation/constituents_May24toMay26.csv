@@ -1,0 +1,451 @@
+rebalance_date,horizon,period,variant,eligible_universe,research_id,token,project,side,weight,entry_price,exit_price,asset_forward_return,return_contribution,turnover,cost_allocated,regime,model
+2025-11-01,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2981,0.2906,-0.025159342502515725,-0.0030159342502515726,1.0,0.0005,Bullish,learned_global
+2025-11-01,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,1083.25,996.63,-0.07996307408262171,-0.008496307408262172,1.0,0.0005,Bullish,learned_global
+2025-11-01,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,110540.68,104722.96,-0.052629674432977835,-0.005762967443297785,1.0,0.0005,Bullish,learned_global
+2025-11-01,7,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,18.8,17.77,-0.05478723404255326,-0.005978723404255325,1.0,0.0005,Bullish,learned_global
+2025-11-01,7,Test,sticky_l_s,eligible_sensitivity,chain:ab,AB,AB,Long,0.1,0.006191296365349833,0.00556546666173485,-0.10108217515115203,-0.010608217515115204,1.0,0.0005,Bullish,learned_global
+2025-11-01,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.3745,0.3269,-0.12710280373831773,0.012210280373831773,1.0,0.0005,Bullish,learned_global
+2025-11-01,7,Test,sticky_l_s,eligible_sensitivity,curve-finance,CRV,Curve Finance (Combined),Short,-0.1,0.4788,0.4798,0.002088554720133695,-0.0007088554720133696,1.0,0.0005,Bullish,learned_global
+2025-11-01,7,Test,sticky_l_s,eligible_sensitivity,lido,LDO,Lido,Short,-0.1,0.8808,0.8416,-0.044504995458673924,0.003950499545867393,1.0,0.0005,Bullish,learned_global
+2025-11-01,7,Test,sticky_l_s,eligible_sensitivity,celestia,TIA,Celestia,Short,-0.1,0.964,1.021,0.0591286307053942,-0.006412863070539421,1.0,0.0005,Bullish,learned_global
+2025-11-01,7,Test,sticky_l_s,eligible_sensitivity,pancakeswap,CAKE,Pancakeswap (Combined),Short,-0.1,2.489,2.55,0.02450783447167537,-0.002950783447167537,1.0,0.0005,Bullish,learned_global
+2025-11-08,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,996.63,926.56,-0.07030693436882296,-0.007230693436882296,0.4,0.0002,Bearish,learned_global
+2025-11-08,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2906,0.2924,0.006194081211286839,0.00041940812112868403,0.4,0.0002,Bearish,learned_global
+2025-11-08,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,104722.96,94261.44,-0.09989709992918461,-0.010189709992918463,0.4,0.0002,Bearish,learned_global
+2025-11-08,7,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,17.77,15.15,-0.14743950478334267,-0.014943950478334267,0.4,0.0002,Bearish,learned_global
+2025-11-08,7,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Long,0.1,0.579,0.4845,-0.16321243523316054,-0.01652124352331605,0.4,0.0002,Bearish,learned_global
+2025-11-08,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.3269,0.2751,-0.158458244111349,0.015645824411134903,0.4,0.0002,Bearish,learned_global
+2025-11-08,7,Test,sticky_l_s,eligible_sensitivity,lido,LDO,Lido,Short,-0.1,0.8416,0.7311,-0.1312975285171103,0.012929752851711029,0.4,0.0002,Bearish,learned_global
+2025-11-08,7,Test,sticky_l_s,eligible_sensitivity,celestia,TIA,Celestia,Short,-0.1,1.021,0.824,-0.1929480901077375,0.019094809010773754,0.4,0.0002,Bearish,learned_global
+2025-11-08,7,Test,sticky_l_s,eligible_sensitivity,pancakeswap,CAKE,Pancakeswap (Combined),Short,-0.1,2.55,2.357,-0.07568627450980381,0.0073686274509803815,0.4,0.0002,Bearish,learned_global
+2025-11-08,7,Test,sticky_l_s,eligible_sensitivity,aethir,ATH,Aethir,Short,-0.1,0.02559,0.02151,-0.1594372801875733,0.01574372801875733,0.4,0.0002,Bearish,learned_global
+2025-11-15,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,926.56,843.6,-0.08953548609911921,-0.009253548609911922,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-15,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,94261.44,86830.0,-0.07883860038632984,-0.008183860038632983,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-15,7,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Long,0.1,0.4845,0.4085,-0.1568627450980392,-0.015986274509803923,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-15,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,483.4,539.3,0.11563922217625144,0.011263922217625144,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-15,7,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,15.15,13.27,-0.12409240924092413,-0.012709240924092414,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-15,7,Test,sticky_l_s,eligible_sensitivity,lido,LDO,Lido,Short,-0.1,0.7311,0.6175,-0.15538230064286684,0.015238230064286686,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-15,7,Test,sticky_l_s,eligible_sensitivity,celestia,TIA,Celestia,Short,-0.1,0.824,0.61,-0.25970873786407767,0.025670873786407766,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-15,7,Test,sticky_l_s,eligible_sensitivity,pancakeswap,CAKE,Pancakeswap (Combined),Short,-0.1,2.357,2.25,-0.04539669070852792,0.004239669070852792,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-15,7,Test,sticky_l_s,eligible_sensitivity,melania-meme,MELANIA,Melania Meme,Short,-0.1,0.1396,0.1212,-0.13180515759312317,0.012880515759312318,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-15,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,7.178,6.136,-0.1451657843410421,0.014216578434104211,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-22,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,843.6,875.31,0.03758890469416776,0.003658890469416776,0.2,0.0001,Bearish,learned_global
+2025-11-22,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,86830.0,90360.0,0.04065415179085563,0.003965415179085563,0.2,0.0001,Bearish,learned_global
+2025-11-22,7,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Long,0.1,0.4085,0.4143,0.014198286413708683,0.0013198286413708684,0.2,0.0001,Bearish,learned_global
+2025-11-22,7,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,13.27,13.71,0.0331574981160514,0.0032157498116051403,0.2,0.0001,Bearish,learned_global
+2025-11-22,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,539.3,540.8,0.002781383274615301,0.0001781383274615301,0.2,0.0001,Bearish,learned_global
+2025-11-22,7,Test,sticky_l_s,eligible_sensitivity,lido,LDO,Lido,Short,-0.1,0.6175,0.6426,0.040647773279351984,-0.004164777327935199,0.2,0.0001,Bearish,learned_global
+2025-11-22,7,Test,sticky_l_s,eligible_sensitivity,celestia,TIA,Celestia,Short,-0.1,0.61,0.637,0.04426229508196733,-0.0045262295081967335,0.2,0.0001,Bearish,learned_global
+2025-11-22,7,Test,sticky_l_s,eligible_sensitivity,pancakeswap,CAKE,Pancakeswap (Combined),Short,-0.1,2.25,2.377,0.0564444444444443,-0.0057444444444444305,0.2,0.0001,Bearish,learned_global
+2025-11-22,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,6.136,6.042,-0.015319426336375508,0.001431942633637551,0.2,0.0001,Bearish,learned_global
+2025-11-22,7,Test,sticky_l_s,eligible_sensitivity,grass,GRASS,Grass,Short,-0.1,0.3656,0.3128,-0.14442013129102838,0.014342013129102838,0.2,0.0001,Bearish,learned_global
+2025-11-29,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,875.31,894.37,0.021775142520935598,0.0018775142520935598,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-29,7,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Long,0.1,0.4143,0.4173,0.007241129616220032,0.0004241129616220032,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-29,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,90360.0,90395.31,0.0003907702523240353,-0.0002609229747675965,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-29,7,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,13.71,13.49,-0.01604668125455877,-0.001904668125455877,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-29,7,Test,sticky_l_s,eligible_sensitivity,chain:bittorrent,BTT,Bittorrent,Long,0.1,4.1629197044122373e-07,4.1223681424418565e-07,-0.009741134792343065,-0.0012741134792343066,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-29,7,Test,sticky_l_s,eligible_sensitivity,pancakeswap,CAKE,Pancakeswap (Combined),Short,-0.1,2.377,2.24,-0.057635675220866434,0.005463567522086644,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-29,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,6.042,5.461,-0.0961602118503806,0.00931602118503806,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-29,7,Test,sticky_l_s,eligible_sensitivity,grass,GRASS,Grass,Short,-0.1,0.3128,0.3096,-0.010230179028133057,0.0007230179028133058,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-29,7,Test,sticky_l_s,eligible_sensitivity,aerodrome,AERO,Aerodrome (Combined),Short,-0.1,0.6613,0.6553,-0.009073037955542151,0.0006073037955542152,0.6,0.00030000000000000003,Bearish,learned_global
+2025-11-29,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,177.46,187.53,0.05674518201284795,-0.005974518201284795,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-06,7,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Long,0.1,0.4173,0.3963,-0.05032350826743359,-0.005332350826743359,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-06,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,894.37,877.27,-0.019119603743417146,-0.0022119603743417145,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-06,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,90395.31,88172.17,-0.02459353256269603,-0.002759353256269603,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-06,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2868,0.2773,-0.03312412831241285,-0.0036124128312412847,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-06,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,60.410745547881874,60.36942622295003,-0.0006839731004327776,-0.0003683973100432778,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-06,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,5.461,5.31,-0.027650613440761918,0.002465061344076192,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-06,7,Test,sticky_l_s,eligible_sensitivity,grass,GRASS,Grass,Short,-0.1,0.3096,0.3352,0.08268733850129206,-0.008568733850129207,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-06,7,Test,sticky_l_s,eligible_sensitivity,aerodrome,AERO,Aerodrome (Combined),Short,-0.1,0.6553,0.5727,-0.12604913779948113,0.012304913779948114,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-06,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,187.53,188.59,0.0056524289447021925,-0.0008652428944702193,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-06,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.2675,0.2344,-0.12373831775700939,0.01207383177570094,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-13,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2773,0.2883,0.03966822935448966,0.003666822935448966,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-13,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,88172.17,88658.86,0.005519768879454823,0.0002519768879454822,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-13,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,877.27,858.64,-0.021236335449747457,-0.0024236335449747456,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-13,7,Test,sticky_l_s,eligible_sensitivity,official-trump,TRUMP,Official Trump,Long,0.1,5.418,5.071,-0.06404577334809902,-0.006704577334809903,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-13,7,Test,sticky_l_s,eligible_sensitivity,chain:aptos,APT,Aptos,Long,0.1,1.615,1.575,-0.024767801857585203,-0.0027767801857585205,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-13,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,5.31,6.117,0.1519774011299435,-0.015497740112994351,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-13,7,Test,sticky_l_s,eligible_sensitivity,grass,GRASS,Grass,Short,-0.1,0.3352,0.2959,-0.11724343675417659,0.01142434367541766,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-13,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,188.59,165.15,-0.12429078954345407,0.012129078954345408,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-13,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.2344,0.2106,-0.1015358361774743,0.00985358361774743,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-13,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002645,0.001974,-0.2536862003780719,0.025068620037807188,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-20,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,57.52945004359271,56.226079220882504,-0.022655714972463326,-0.0025655714972463326,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-20,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,88658.86,87952.71,-0.007964799005987566,-0.0010964799005987566,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-20,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2883,0.285,-0.01144640998959423,-0.001444640998959423,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-20,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,858.64,859.32,0.0007919500605608754,-0.00022080499394391248,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-20,7,Test,sticky_l_s,eligible_sensitivity,chain:ab,AB,AB,Long,0.1,0.004976465821187414,0.004576185376855963,-0.08043468170267509,-0.00834346817026751,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-20,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,6.117,6.23,0.01847310773254862,-0.0021473107732548624,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-20,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,165.15,153.64,-0.06969421737814119,0.006669421737814119,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-20,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.2106,0.2081,-0.011870845204178582,0.0008870845204178582,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-20,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.001974,0.001882,-0.046605876393110424,0.0043605876393110424,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-20,7,Test,sticky_l_s,eligible_sensitivity,pudgy-penguins,PENGU,Pudgy Penguins,Short,-0.1,0.009065,0.009313,0.027357970215112992,-0.0030357970215112995,0.6,0.00030000000000000003,Bearish,learned_global
+2025-12-27,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,56.226079220882504,57.391983034648554,0.020735997066162692,0.001873599706616269,0.4,0.0002,Bearish,learned_global
+2025-12-27,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,859.32,895.43,0.0420215984732113,0.00400215984732113,0.4,0.0002,Bearish,learned_global
+2025-12-27,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.285,0.2939,0.031228070175438605,0.0029228070175438604,0.4,0.0002,Bearish,learned_global
+2025-12-27,7,Test,sticky_l_s,eligible_sensitivity,defi-swap,CRO,Defi Swap,Long,0.1,0.09267759634778258,0.09994115340647394,0.07837446529616598,0.007637446529616599,0.4,0.0002,Bearish,learned_global
+2025-12-27,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,87952.71,91529.73,0.04066980994673153,0.003866980994673153,0.4,0.0002,Bearish,learned_global
+2025-12-27,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,6.23,5.85,-0.06099518459069031,0.005899518459069031,0.4,0.0002,Bearish,learned_global
+2025-12-27,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,153.64,164.23,0.06892736266597232,-0.007092736266597233,0.4,0.0002,Bearish,learned_global
+2025-12-27,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.2081,0.2507,0.20470927438731357,-0.020670927438731355,0.4,0.0002,Bearish,learned_global
+2025-12-27,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.001882,0.002355,0.2513283740701382,-0.02533283740701382,0.4,0.0002,Bearish,learned_global
+2025-12-27,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,25.342,26.862,0.059979480703969745,-0.006197948070396975,0.4,0.0002,Bearish,learned_global
+2026-01-03,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,57.391983034648554,55.03402742468806,-0.04108510431739132,-0.004208510431739133,0.2,0.0001,Bearish,learned_global
+2026-01-03,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,895.43,904.32,0.009928190925030611,0.0008928190925030612,0.2,0.0001,Bearish,learned_global
+2026-01-03,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,91529.73,91013.65,-0.0056383865657639864,-0.0006638386565763988,0.2,0.0001,Bearish,learned_global
+2026-01-03,7,Test,sticky_l_s,eligible_sensitivity,defi-swap,CRO,Defi Swap,Long,0.1,0.09994115340647394,0.10058428803658413,0.006435133157754125,0.0005435133157754125,0.2,0.0001,Bearish,learned_global
+2026-01-03,7,Test,sticky_l_s,eligible_sensitivity,chain:bittorrent,BTT,Bittorrent,Long,0.1,4.065356055896466e-07,4.2243209087944304e-07,0.03910231987365509,0.003810231987365509,0.2,0.0001,Bearish,learned_global
+2026-01-03,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,5.85,5.456,-0.06735042735042718,0.0066350427350427175,0.2,0.0001,Bearish,learned_global
+2026-01-03,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,164.23,167.95,0.02265115995859457,-0.0023651159958594566,0.2,0.0001,Bearish,learned_global
+2026-01-03,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.2507,0.2285,-0.0885520542481052,0.00875520542481052,0.2,0.0001,Bearish,learned_global
+2026-01-03,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002355,0.002398,0.018259023354564752,-0.0019259023354564753,0.2,0.0001,Bearish,learned_global
+2026-01-03,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,26.862,24.432,-0.09046236318963596,0.008946236318963597,0.2,0.0001,Bearish,learned_global
+2026-01-10,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,55.03402742468806,57.30174104061148,0.04120566351475352,0.0038205663514753524,0.6,0.00030000000000000003,Bearish,learned_global
+2026-01-10,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,91013.65,93673.14,0.029220781717907318,0.002622078171790732,0.6,0.00030000000000000003,Bearish,learned_global
+2026-01-10,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,904.32,932.51,0.031172593772115897,0.00281725937721159,0.6,0.00030000000000000003,Bearish,learned_global
+2026-01-10,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2995,0.3178,0.06110183639399014,0.005810183639399015,0.6,0.00030000000000000003,Bearish,learned_global
+2026-01-10,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,649.1,591.4,-0.0888923124325991,-0.00918923124325991,0.6,0.00030000000000000003,Bearish,learned_global
+2026-01-10,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,5.456,5.095,-0.06616568914956023,0.006316568914956023,0.6,0.00030000000000000003,Bearish,learned_global
+2026-01-10,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,167.95,168.84,0.005299196189342048,-0.0008299196189342048,0.6,0.00030000000000000003,Bearish,learned_global
+2026-01-10,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002398,0.002594,0.08173477898248538,-0.008473477898248538,0.6,0.00030000000000000003,Bearish,learned_global
+2026-01-10,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,24.432,24.456,0.0009823182711199419,-0.0003982318271119942,0.6,0.00030000000000000003,Bearish,learned_global
+2026-01-10,7,Test,sticky_l_s,eligible_sensitivity,aerodrome,AERO,Aerodrome (Combined),Short,-0.1,0.5554,0.5126,-0.07706157724162777,0.007406157724162777,0.6,0.00030000000000000003,Bearish,learned_global
+2026-01-17,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,57.30174104061148,54.28759687197061,-0.0526012668010325,-0.00536012668010325,0.2,0.0001,Bearish,learned_global
+2026-01-17,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,591.4,572.2,-0.032465336489685415,-0.0033465336489685413,0.2,0.0001,Bearish,learned_global
+2026-01-17,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,93673.14,86670.36,-0.07475760927839081,-0.007575760927839082,0.2,0.0001,Bearish,learned_global
+2026-01-17,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.3178,0.2957,-0.0695405915670233,-0.0070540591567023305,0.2,0.0001,Bearish,learned_global
+2026-01-17,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,932.51,866.02,-0.07130218442697667,-0.007230218442697668,0.2,0.0001,Bearish,learned_global
+2026-01-17,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,5.095,4.637,-0.08989205103042197,0.008889205103042199,0.2,0.0001,Bearish,learned_global
+2026-01-17,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,168.84,147.96,-0.12366737739872069,0.01226673773987207,0.2,0.0001,Bearish,learned_global
+2026-01-17,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002594,0.002467,-0.048959136468774034,0.004795913646877404,0.2,0.0001,Bearish,learned_global
+2026-01-17,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,24.456,22.193,-0.09253352960418704,0.009153352960418705,0.2,0.0001,Bearish,learned_global
+2026-01-17,7,Test,sticky_l_s,eligible_sensitivity,axie-infinity,AXS,Axie Infinity,Short,-0.1,1.887,2.049,0.08585055643879169,-0.00868505564387917,0.2,0.0001,Bearish,learned_global
+2026-01-24,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,572.2,516.2,-0.0978678783642083,-0.00988678783642083,0.2,0.0001,Bearish,learned_global
+2026-01-24,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,54.28759687197061,49.35690090118427,-0.090825460232006,-0.0091825460232006,0.2,0.0001,Bearish,learned_global
+2026-01-24,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,86670.36,76968.21,-0.11194311411652147,-0.011294311411652148,0.2,0.0001,Bearish,learned_global
+2026-01-24,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2957,0.2847,-0.03719986472776471,-0.003819986472776471,0.2,0.0001,Bearish,learned_global
+2026-01-24,7,Test,sticky_l_s,eligible_sensitivity,world-liberty-financial,WLFI,World Liberty Financial,Long,0.1,0.1662,0.1298,-0.2190132370637785,-0.022001323706377852,0.2,0.0001,Bearish,learned_global
+2026-01-24,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,4.637,3.837,-0.1725253396592623,0.017152533965926232,0.2,0.0001,Bearish,learned_global
+2026-01-24,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,147.96,124.23,-0.16038118410381186,0.01593811841038119,0.2,0.0001,Bearish,learned_global
+2026-01-24,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002467,0.002557,0.0364815565464125,-0.0037481556546412496,0.2,0.0001,Bearish,learned_global
+2026-01-24,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,22.193,30.573,0.3775965394493759,-0.037859653944937594,0.2,0.0001,Bearish,learned_global
+2026-01-24,7,Test,sticky_l_s,eligible_sensitivity,axie-infinity,AXS,Axie Infinity,Short,-0.1,2.049,1.731,-0.1551976573938506,0.015419765739385062,0.2,0.0001,Bearish,learned_global
+2026-01-31,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,516.2,527.0,0.02092212320805875,0.0019922123208058755,0.2,0.0001,Bearish,learned_global
+2026-01-31,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,49.35690090118427,52.7741270950109,0.06923502350093136,0.006823502350093136,0.2,0.0001,Bearish,learned_global
+2026-01-31,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2847,0.2778,-0.02423603793466811,-0.002523603793466811,0.2,0.0001,Bearish,learned_global
+2026-01-31,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,758.54,639.93,-0.15636617712974932,-0.01573661771297493,0.2,0.0001,Bearish,learned_global
+2026-01-31,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,76968.21,70330.38,-0.08624118970676342,-0.008724118970676343,0.2,0.0001,Bearish,learned_global
+2026-01-31,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.837,3.468,-0.09616888193901496,0.009516888193901497,0.2,0.0001,Bearish,learned_global
+2026-01-31,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,124.23,112.52,-0.09426064557675284,0.009326064557675286,0.2,0.0001,Bearish,learned_global
+2026-01-31,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002557,0.002089,-0.18302698474775114,0.018202698474775115,0.2,0.0001,Bearish,learned_global
+2026-01-31,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,30.573,32.441,0.061099663101429336,-0.006209966310142934,0.2,0.0001,Bearish,learned_global
+2026-01-31,7,Test,sticky_l_s,eligible_sensitivity,axie-infinity,AXS,Axie Infinity,Short,-0.1,1.731,1.264,-0.2697862507221259,0.026878625072212593,0.2,0.0001,Bearish,learned_global
+2026-02-07,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2778,0.2805,0.009719222462203136,0.0006719222462203137,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,7,Test,sticky_l_s,eligible_sensitivity,world-liberty-financial,WLFI,World Liberty Financial,Long,0.1,0.1048,0.1014,-0.03244274809160308,-0.0035442748091603082,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,639.93,615.16,-0.03870735861734875,-0.004170735861734875,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,52.7741270950109,52.33644763285213,-0.008293447684521671,-0.0011293447684521671,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,527.0,553.5,0.050284629981024676,0.004728462998102468,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002089,0.002204,0.05505026328386764,-0.005805026328386764,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,32.441,30.699,-0.05369748158194876,0.005069748158194876,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,7,Test,sticky_l_s,eligible_sensitivity,axie-infinity,AXS,Axie Infinity,Short,-0.1,1.264,1.405,0.11155063291139244,-0.011455063291139244,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,7,Test,sticky_l_s,eligible_sensitivity,virtuals-protocol,VIRTUAL,Virtuals Protocol,Short,-0.1,0.5774,0.6323,0.09508139937651539,-0.009808139937651538,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,7,Test,sticky_l_s,eligible_sensitivity,ondo-finance,ONDO,Ondo Finance (Combined),Short,-0.1,0.2579,0.2757,0.06901899961225277,-0.007201899961225278,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-14,7,Test,sticky_l_s,eligible_sensitivity,world-liberty-financial,WLFI,World Liberty Financial,Long,0.1,0.1014,0.1146,0.1301775147928994,0.012717751479289942,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-14,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,615.16,614.8,-0.0005852136029651511,-0.00035852136029651516,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-14,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,68832.58,67643.4,-0.017276411838696215,-0.0020276411838696215,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-14,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2805,0.2906,0.036007130124777076,0.003300713012477708,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-14,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,553.5,570.7,0.03107497741644094,0.002807497741644094,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-14,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002204,0.002022,-0.08257713248638832,0.007957713248638832,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-14,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,30.699,29.015,-0.05485520701000035,0.005185520701000036,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-14,7,Test,sticky_l_s,eligible_sensitivity,axie-infinity,AXS,Axie Infinity,Short,-0.1,1.405,1.308,-0.06903914590747329,0.006603914590747329,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-14,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.1216,0.1,-0.17763157894736836,0.017463157894736837,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-14,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,125.81,117.95,-0.06247516095699868,0.005947516095699868,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-21,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,614.8,617.96,0.00513988288874434,0.0003139882888744341,0.4,0.0002,Bearish,learned_global
+2026-02-21,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,67643.4,65776.47,-0.02759958842991328,-0.002959958842991328,0.4,0.0002,Bearish,learned_global
+2026-02-21,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2906,0.2807,-0.034067446662078504,-0.003606744666207851,0.4,0.0002,Bearish,learned_global
+2026-02-21,7,Test,sticky_l_s,eligible_sensitivity,world-liberty-financial,WLFI,World Liberty Financial,Long,0.1,0.1146,0.108,-0.05759162303664922,-0.005959162303664922,0.4,0.0002,Bearish,learned_global
+2026-02-21,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,50.70439996373134,49.847762971421844,-0.016894726945240413,-0.0018894726945240415,0.4,0.0002,Bearish,learned_global
+2026-02-21,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002022,0.001923,-0.04896142433234418,0.004696142433234419,0.4,0.0002,Bearish,learned_global
+2026-02-21,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,29.015,31.53,0.08667930380837507,-0.008867930380837509,0.4,0.0002,Bearish,learned_global
+2026-02-21,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.1,0.1035,0.03499999999999992,-0.0036999999999999924,0.4,0.0002,Bearish,learned_global
+2026-02-21,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,117.95,113.68,-0.03620178041543021,0.0034201780415430206,0.4,0.0002,Bearish,learned_global
+2026-02-21,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.491,3.748,0.07361787453451729,-0.007561787453451729,0.4,0.0002,Bearish,learned_global
+2026-02-28,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,49.847762971421844,53.83316106203296,0.07995139306243249,0.00789513930624325,0.2,0.0001,Bearish,learned_global
+2026-02-28,7,Test,sticky_l_s,eligible_sensitivity,chain:canton,CC,Canton,Long,0.1,0.16178,0.14987,-0.07361849425145262,-0.007461849425145262,0.2,0.0001,Bearish,learned_global
+2026-02-28,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,617.96,611.98,-0.009677001747685932,-0.0010677001747685932,0.2,0.0001,Bearish,learned_global
+2026-02-28,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,65776.47,65971.2,0.002960481156863537,0.00019604811568635372,0.2,0.0001,Bearish,learned_global
+2026-02-28,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2807,0.2891,0.029925187032419087,0.002892518703241909,0.2,0.0001,Bearish,learned_global
+2026-02-28,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.001923,0.001917,-0.0031201248049921304,0.0002120124804992131,0.2,0.0001,Bearish,learned_global
+2026-02-28,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,31.53,30.685,-0.026799873136695296,0.0025799873136695298,0.2,0.0001,Bearish,learned_global
+2026-02-28,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.1035,0.0988,-0.04541062801932361,0.004441062801932361,0.2,0.0001,Bearish,learned_global
+2026-02-28,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,113.68,105.53,-0.07169247009148494,0.007069247009148494,0.2,0.0001,Bearish,learned_global
+2026-02-28,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.748,3.661,-0.02321237993596592,0.002221237993596592,0.2,0.0001,Bearish,learned_global
+2026-03-07,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,443.1,469.7,0.0600315955766193,0.00590315955766193,0.2,0.0001,Bearish,learned_global
+2026-03-07,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,65971.2,72815.24,0.10374284536282508,0.01027428453628251,0.2,0.0001,Bearish,learned_global
+2026-03-07,7,Test,sticky_l_s,eligible_sensitivity,chain:canton,CC,Canton,Long,0.1,0.14987,0.15078,0.006071929005137644,0.0005071929005137644,0.2,0.0001,Bearish,learned_global
+2026-03-07,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,611.98,673.77,0.10096735187424422,0.009996735187424423,0.2,0.0001,Bearish,learned_global
+2026-03-07,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2891,0.2987,0.033206502940159144,0.0032206502940159147,0.2,0.0001,Bearish,learned_global
+2026-03-07,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.001917,0.001947,0.015649452269170583,-0.0016649452269170584,0.2,0.0001,Bearish,learned_global
+2026-03-07,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,30.685,37.242,0.21368746944761274,-0.021468746944761277,0.2,0.0001,Bearish,learned_global
+2026-03-07,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.0988,0.1104,0.11740890688259098,-0.011840890688259099,0.2,0.0001,Bearish,learned_global
+2026-03-07,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,105.53,116.36,0.10262484601535116,-0.010362484601535115,0.2,0.0001,Bearish,learned_global
+2026-03-07,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.661,4.069,0.11144496039333518,-0.011244496039333519,0.2,0.0001,Bearish,learned_global
+2026-03-14,7,Test,sticky_l_s,eligible_sensitivity,world-liberty-financial,WLFI,World Liberty Financial,Long,0.1,0.1043,0.0972,-0.06807286673058499,-0.007007286673058499,0.4,0.0002,Bearish,learned_global
+2026-03-14,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2987,0.3104,0.03916973552058911,0.0037169735520589113,0.4,0.0002,Bearish,learned_global
+2026-03-14,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,673.77,626.41,-0.07029104887424498,-0.007229104887424498,0.4,0.0002,Bearish,learned_global
+2026-03-14,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,72815.24,67859.0,-0.06806597080501287,-0.007006597080501287,0.4,0.0002,Bearish,learned_global
+2026-03-14,7,Test,sticky_l_s,eligible_sensitivity,rain,RAIN,Rain,Long,0.1,0.009035806655306112,0.00843228640670538,-0.06679207198909298,-0.006879207198909298,0.4,0.0002,Bearish,learned_global
+2026-03-14,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.001947,0.001764,-0.09399075500770415,0.009199075500770416,0.4,0.0002,Bearish,learned_global
+2026-03-14,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,37.242,38.342,0.029536544761290973,-0.0031536544761290976,0.4,0.0002,Bearish,learned_global
+2026-03-14,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.1104,0.0955,-0.13496376811594202,0.013296376811594202,0.4,0.0002,Bearish,learned_global
+2026-03-14,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,116.36,106.32,-0.08628394637332426,0.008428394637332425,0.4,0.0002,Bearish,learned_global
+2026-03-14,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,4.069,3.471,-0.14696485623003197,0.014496485623003198,0.4,0.0002,Bearish,learned_global
+2026-03-21,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.3104,0.322,0.037371134020618646,0.0033371134020618648,0.8,0.0004,Bearish,learned_global
+2026-03-21,7,Test,sticky_l_s,eligible_sensitivity,chain:bittorrent,BTT,Bittorrent,Long,0.1,3.357322349188872e-07,3.163743240287107e-07,-0.0576587794581398,-0.00616587794581398,0.8,0.0004,Bearish,learned_global
+2026-03-21,7,Test,sticky_l_s,eligible_sensitivity,defi-swap,CRO,Defi Swap,Long,0.1,0.07465117111953973,0.07163175743829836,-0.04044697003354902,-0.004444697003354902,0.8,0.0004,Bearish,learned_global
+2026-03-21,7,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Long,0.1,0.2506,0.2398,-0.04309656823623298,-0.0047096568236232985,0.8,0.0004,Bearish,learned_global
+2026-03-21,7,Test,sticky_l_s,eligible_sensitivity,rain,RAIN,Rain,Long,0.1,0.00843228640670538,0.008074296356103168,-0.04245468350286796,-0.004645468350286797,0.8,0.0004,Bearish,learned_global
+2026-03-21,7,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.001764,0.001669,-0.05385487528344668,0.004985487528344668,0.8,0.0004,Bearish,learned_global
+2026-03-21,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,38.342,37.838,-0.013144854206874945,0.0009144854206874946,0.8,0.0004,Bearish,learned_global
+2026-03-21,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.0955,0.0898,-0.05968586387434549,0.005568586387434549,0.8,0.0004,Bearish,learned_global
+2026-03-21,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.471,3.355,-0.03341976375684241,0.0029419763756842413,0.8,0.0004,Bearish,learned_global
+2026-03-21,7,Test,sticky_l_s,eligible_sensitivity,official-trump,TRUMP,Official Trump,Short,-0.1,3.194,2.868,-0.10206637445209765,0.009806637445209767,0.8,0.0004,Bearish,learned_global
+2026-03-28,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,51.25865897671456,51.48844165768005,0.004482807111084952,-5.171928889150467e-05,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2026-03-28,7,Test,sticky_l_s,eligible_sensitivity,defi-swap,CRO,Defi Swap,Long,0.1,0.07163175743829836,0.06981696508688659,-0.02533502480341887,-0.0030335024803418873,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2026-03-28,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,606.09,601.5,-0.007573132703063923,-0.0012573132703063922,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2026-03-28,7,Test,sticky_l_s,eligible_sensitivity,rain,RAIN,Rain,Long,0.1,0.008074296356103168,0.00738289117358299,-0.08563039452937116,-0.009063039452937117,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2026-03-28,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.322,0.3189,-0.009627329192546608,-0.0014627329192546607,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2026-03-28,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,37.838,36.844,-0.02626988741476821,0.002126988741476821,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2026-03-28,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.0898,0.0806,-0.10244988864142535,0.009744988864142535,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2026-03-28,7,Test,sticky_l_s,eligible_sensitivity,aethir,ATH,Aethir,Short,-0.1,0.006862,0.006783,-0.011512678519382091,0.0006512678519382092,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2026-03-28,7,Test,sticky_l_s,eligible_sensitivity,ondo-finance,ONDO,Ondo Finance (Combined),Short,-0.1,0.2576,0.2586,0.0038819875776396895,-0.0008881987577639689,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2026-03-28,7,Test,sticky_l_s,eligible_sensitivity,chain:aptos,APT,Aptos,Short,-0.1,0.922,0.85,-0.07809110629067251,0.007309110629067251,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2026-04-04,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,51.48844165768005,53.36568876828596,0.03645958296983931,0.0031459582969839313,1.0,0.0005,Bearish,learned_global
+2026-04-04,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,601.5,592.19,-0.015477971737323237,-0.0020477971737323237,1.0,0.0005,Bearish,learned_global
+2026-04-04,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,69034.18,70740.98,0.024723984553738587,0.001972398455373859,1.0,0.0005,Bearish,learned_global
+2026-04-04,7,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,9.06,9.03,-0.0033112582781458233,-0.0008311258278145823,1.0,0.0005,Bearish,learned_global
+2026-04-04,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.3189,0.3213,0.007525870178739291,0.0002525870178739292,1.0,0.0005,Bearish,learned_global
+2026-04-04,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,36.844,40.823,0.10799587449788284,-0.011299587449788285,1.0,0.0005,Bearish,learned_global
+2026-04-04,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.0806,0.0912,0.13151364764267992,-0.013651364764267994,1.0,0.0005,Bearish,learned_global
+2026-04-04,7,Test,sticky_l_s,eligible_sensitivity,chain:algorand,ALGO,Algorand,Short,-0.1,0.1215,0.1018,-0.1621399176954732,0.015713991769547322,1.0,0.0005,Bearish,learned_global
+2026-04-04,7,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.148,3.018,-0.04129606099110561,0.003629606099110561,1.0,0.0005,Bearish,learned_global
+2026-04-04,7,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Short,-0.1,0.2508,0.2361,-0.05861244019138767,0.005361244019138768,1.0,0.0005,Bearish,learned_global
+2026-04-11,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,53.36568876828596,55.05213416881053,0.03160167964564509,0.002860167964564509,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-11,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,592.19,616.06,0.040308009253786636,0.0037308009253786637,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-11,7,Test,sticky_l_s,eligible_sensitivity,world-liberty-financial,WLFI,World Liberty Financial,Long,0.1,0.0784,0.0773,-0.014030612244897989,-0.0017030612244897988,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-11,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.3213,0.3291,0.024276377217553824,0.002127637721755383,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-11,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,70740.98,73801.79,0.04326784842392617,0.004026784842392617,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-11,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,40.823,40.703,-0.0029395193885799475,-6.04806114200523e-06,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-11,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.0912,0.1125,0.23355263157894735,-0.023655263157894738,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-11,7,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Short,-0.1,0.2361,0.2424,0.02668360864040653,-0.002968360864040653,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-11,7,Test,sticky_l_s,eligible_sensitivity,falcon-finance,FF,Falcon Finance,Short,-0.1,0.07889,0.07242,-0.08201292939536065,0.007901292939536064,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-11,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,89.84,90.28,0.004897595725734671,-0.0007897595725734672,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-18,7,Test,sticky_l_s,eligible_sensitivity,chain:canton,CC,Canton,Long,0.1,0.14719,0.15028,0.020993273999592388,0.0017993273999592388,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-18,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.3291,0.3234,-0.01731996353691878,-0.002031996353691878,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-18,7,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,616.06,635.76,0.031977404798233966,0.002897740479823397,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-18,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,55.05213416881053,54.91498807135203,-0.0024912040110555145,-0.0005491204011055515,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-18,7,Test,sticky_l_s,eligible_sensitivity,world-liberty-financial,WLFI,World Liberty Financial,Long,0.1,0.0773,0.075,-0.02975420439844756,-0.003275420439844756,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-18,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,40.703,42.428,0.04238016853794546,-0.004538016853794546,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-18,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.1125,0.1094,-0.027555555555555555,0.002455555555555556,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-18,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,90.28,96.53,0.06922906513070437,-0.007222906513070437,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-18,7,Test,sticky_l_s,eligible_sensitivity,chain:arbitrum,ARB,Arbitrum,Short,-0.1,0.1215,0.1295,0.0658436213991771,-0.00688436213991771,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-18,7,Test,sticky_l_s,eligible_sensitivity,pudgy-penguins,PENGU,Pudgy Penguins,Short,-0.1,0.006953,0.008951,0.2873579749748312,-0.02903579749748312,0.6,0.00030000000000000003,Bearish,learned_global
+2026-04-25,7,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.3234,0.3385,0.04669140383426096,0.004269140383426096,0.8,0.0004,Bearish,learned_global
+2026-04-25,7,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Long,0.1,0.2522,0.2495,-0.010705789056304482,-0.0014705789056304482,0.8,0.0004,Bearish,learned_global
+2026-04-25,7,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,54.91498807135203,58.64241432598286,0.06787630090691676,0.0063876300906916764,0.8,0.0004,Bearish,learned_global
+2026-04-25,7,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,9.45,9.08,-0.03915343915343905,-0.004315343915343906,0.8,0.0004,Bearish,learned_global
+2026-04-25,7,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,78657.55,78568.57,-0.0011312327932918587,-0.0005131232793291859,0.8,0.0004,Bearish,learned_global
+2026-04-25,7,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,42.428,41.54,-0.020929574809088303,0.0016929574809088305,0.8,0.0004,Bearish,learned_global
+2026-04-25,7,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.1094,0.1005,-0.08135283363802548,0.007735283363802549,0.8,0.0004,Bearish,learned_global
+2026-04-25,7,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,96.53,92.43,-0.042473842328809686,0.0038473842328809685,0.8,0.0004,Bearish,learned_global
+2026-04-25,7,Test,sticky_l_s,eligible_sensitivity,pudgy-penguins,PENGU,Pudgy Penguins,Short,-0.1,0.008951,0.009883,0.10412244441961782,-0.010812244441961782,0.8,0.0004,Bearish,learned_global
+2026-04-25,7,Test,sticky_l_s,eligible_sensitivity,apecoin,APE,ApeCoin,Short,-0.1,0.1452,0.1661,0.14393939393939403,-0.014793939393939403,0.8,0.0004,Bearish,learned_global
+2025-11-01,14,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2981,0.2924,-0.019121100301912053,-0.0024121100301912053,1.0,0.0005,Bullish,learned_global
+2025-11-01,14,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,1083.25,926.56,-0.14464804984998847,-0.014964804984998848,1.0,0.0005,Bullish,learned_global
+2025-11-01,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,110540.68,94261.44,-0.14726922251609087,-0.015226922251609088,1.0,0.0005,Bullish,learned_global
+2025-11-01,14,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,18.8,15.15,-0.19414893617021278,-0.01991489361702128,1.0,0.0005,Bullish,learned_global
+2025-11-01,14,Test,sticky_l_s,eligible_sensitivity,chain:ab,AB,AB,Long,0.1,0.006191296365349833,0.006911134385223318,0.11626612221345534,0.011126612221345533,1.0,0.0005,Bullish,learned_global
+2025-11-01,14,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.3745,0.2751,-0.2654205607476635,0.026042056074766354,1.0,0.0005,Bullish,learned_global
+2025-11-01,14,Test,sticky_l_s,eligible_sensitivity,curve-finance,CRV,Curve Finance (Combined),Short,-0.1,0.4788,0.4209,-0.12092731829573933,0.011592731829573932,1.0,0.0005,Bullish,learned_global
+2025-11-01,14,Test,sticky_l_s,eligible_sensitivity,lido,LDO,Lido,Short,-0.1,0.8808,0.7311,-0.16995912806539515,0.016495912806539514,1.0,0.0005,Bullish,learned_global
+2025-11-01,14,Test,sticky_l_s,eligible_sensitivity,celestia,TIA,Celestia,Short,-0.1,0.964,0.824,-0.1452282157676349,0.014022821576763489,1.0,0.0005,Bullish,learned_global
+2025-11-01,14,Test,sticky_l_s,eligible_sensitivity,pancakeswap,CAKE,Pancakeswap (Combined),Short,-0.1,2.489,2.357,-0.053033346725592456,0.0048033346725592455,1.0,0.0005,Bullish,learned_global
+2025-11-15,14,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,926.56,875.31,-0.05531212225867721,-0.005931212225867721,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-15,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,94261.44,90360.0,-0.04138956502255853,-0.0045389565022558535,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-15,14,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Long,0.1,0.4845,0.4143,-0.144891640866873,-0.014889164086687301,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-15,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,483.4,540.8,0.11874224244931719,0.01147422424493172,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-15,14,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,15.15,13.71,-0.09504950495049502,-0.009904950495049502,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-15,14,Test,sticky_l_s,eligible_sensitivity,lido,LDO,Lido,Short,-0.1,0.7311,0.6426,-0.12105047189167017,0.011705047189167019,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-15,14,Test,sticky_l_s,eligible_sensitivity,celestia,TIA,Celestia,Short,-0.1,0.824,0.637,-0.2269417475728155,0.02229417475728155,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-15,14,Test,sticky_l_s,eligible_sensitivity,pancakeswap,CAKE,Pancakeswap (Combined),Short,-0.1,2.357,2.377,0.008485362749257375,-0.0012485362749257375,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-15,14,Test,sticky_l_s,eligible_sensitivity,melania-meme,MELANIA,Melania Meme,Short,-0.1,0.1396,0.1288,-0.0773638968481376,0.007336389684813761,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-15,14,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,7.178,6.042,-0.15826135413764286,0.015426135413764289,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-29,14,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,875.31,877.27,0.0022392066810617006,-0.00017607933189382996,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-29,14,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Long,0.1,0.4143,0.3963,-0.04344677769732086,-0.004744677769732086,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-29,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,90360.0,88172.17,-0.02421237273129706,-0.0028212372731297062,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-29,14,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,13.71,12.88,-0.06053975200583517,-0.0064539752005835175,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-29,14,Test,sticky_l_s,eligible_sensitivity,chain:bittorrent,BTT,Bittorrent,Long,0.1,4.1629197044122373e-07,4.1464798169572756e-07,-0.0039491243219361705,-0.0007949124321936171,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-29,14,Test,sticky_l_s,eligible_sensitivity,pancakeswap,CAKE,Pancakeswap (Combined),Short,-0.1,2.377,2.143,-0.0984434160706773,0.009444341607067731,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-29,14,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,6.042,5.31,-0.12115193644488587,0.011715193644488588,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-29,14,Test,sticky_l_s,eligible_sensitivity,grass,GRASS,Grass,Short,-0.1,0.3128,0.3352,0.07161125319693085,-0.0075611253196930855,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-29,14,Test,sticky_l_s,eligible_sensitivity,aerodrome,AERO,Aerodrome (Combined),Short,-0.1,0.6613,0.5727,-0.13397852714350522,0.012997852714350524,0.7999999999999999,0.0004,Bearish,learned_global
+2025-11-29,14,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,177.46,188.59,0.06271835906683187,-0.006671835906683188,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-13,14,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2773,0.285,0.027767760548142784,0.0022767760548142784,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2025-12-13,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,88172.17,87952.71,-0.0024889939762171576,-0.0007488993976217156,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2025-12-13,14,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,877.27,859.32,-0.02046120350633207,-0.002546120350633207,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2025-12-13,14,Test,sticky_l_s,eligible_sensitivity,official-trump,TRUMP,Official Trump,Long,0.1,5.418,4.929,-0.09025470653377632,-0.009525470653377633,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2025-12-13,14,Test,sticky_l_s,eligible_sensitivity,chain:aptos,APT,Aptos,Long,0.1,1.615,1.726,0.06873065015479884,0.006373065015479885,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2025-12-13,14,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,5.31,6.23,0.1732580037664786,-0.01782580037664786,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2025-12-13,14,Test,sticky_l_s,eligible_sensitivity,grass,GRASS,Grass,Short,-0.1,0.3352,0.3007,-0.1029236276849641,0.009792362768496411,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2025-12-13,14,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,188.59,153.64,-0.1853226576170529,0.01803226576170529,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2025-12-13,14,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002645,0.001882,-0.2884688090737241,0.028346880907372408,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2025-12-13,14,Test,sticky_l_s,eligible_sensitivity,pudgy-penguins,PENGU,Pudgy Penguins,Short,-0.1,0.010398,0.009313,-0.10434698980573176,0.009934698980573177,0.9999999999999999,0.0004999999999999999,Bearish,learned_global
+2025-12-27,14,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,56.226079220882504,55.03402742468806,-0.021201047853817045,-0.002520104785381705,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-27,14,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,859.32,904.32,0.052366987850858804,0.00483669878508588,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-27,14,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.285,0.2995,0.0508771929824563,0.00468771929824563,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-27,14,Test,sticky_l_s,eligible_sensitivity,defi-swap,CRO,Defi Swap,Long,0.1,0.09267759634778258,0.10058428803658413,0.08531394857426866,0.008131394857426867,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-27,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,87952.71,91013.65,0.0348021112709318,0.00308021112709318,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-27,14,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,6.23,5.456,-0.12423756019261634,0.012023756019261636,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-27,14,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,153.64,167.95,0.09313980734183813,-0.009713980734183813,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-27,14,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.001882,0.002398,0.27417640807651433,-0.027817640807651436,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-27,14,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,25.342,24.432,-0.035908768053034446,0.0031908768053034446,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-27,14,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Short,-0.1,12.64,13.7,0.08386075949367089,-0.00878607594936709,0.7999999999999999,0.0004,Bearish,learned_global
+2026-01-10,14,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,55.03402742468806,54.28759687197061,-0.013563073386531954,-0.0014563073386531955,0.2,0.0001,Bearish,learned_global
+2026-01-10,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,91013.65,86670.36,-0.047721303342959986,-0.004872130334295999,0.2,0.0001,Bearish,learned_global
+2026-01-10,14,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,904.32,866.02,-0.042352264685067254,-0.004335226468506726,0.2,0.0001,Bearish,learned_global
+2026-01-10,14,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2995,0.2957,-0.012687813021702743,-0.0013687813021702744,0.2,0.0001,Bearish,learned_global
+2026-01-10,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,649.1,572.2,-0.11847173008781386,-0.011947173008781387,0.2,0.0001,Bearish,learned_global
+2026-01-10,14,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,5.456,4.637,-0.15010997067448695,0.014910997067448696,0.2,0.0001,Bearish,learned_global
+2026-01-10,14,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,167.95,147.96,-0.11902351890443574,0.011802351890443576,0.2,0.0001,Bearish,learned_global
+2026-01-10,14,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002398,0.002467,0.028773978315262738,-0.0029773978315262737,0.2,0.0001,Bearish,learned_global
+2026-01-10,14,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,24.432,22.193,-0.09164210870988854,0.009064210870988855,0.2,0.0001,Bearish,learned_global
+2026-01-10,14,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Short,-0.1,13.7,11.49,-0.16131386861313868,0.01603138686131387,0.2,0.0001,Bearish,learned_global
+2026-01-24,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,572.2,527.0,-0.07899335896539683,-0.008099335896539684,0.4,0.0002,Bearish,learned_global
+2026-01-24,14,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,54.28759687197061,52.7741270950109,-0.027878739604720537,-0.002987873960472054,0.4,0.0002,Bearish,learned_global
+2026-01-24,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,86670.36,70330.38,-0.188530196482396,-0.0190530196482396,0.4,0.0002,Bearish,learned_global
+2026-01-24,14,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2957,0.2778,-0.060534325329726135,-0.006253432532972614,0.4,0.0002,Bearish,learned_global
+2026-01-24,14,Test,sticky_l_s,eligible_sensitivity,world-liberty-financial,WLFI,World Liberty Financial,Long,0.1,0.1662,0.1048,-0.3694344163658242,-0.03714344163658242,0.4,0.0002,Bearish,learned_global
+2026-01-24,14,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,4.637,3.468,-0.2521026525770972,0.025010265257709722,0.4,0.0002,Bearish,learned_global
+2026-01-24,14,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,147.96,112.52,-0.2395241957285753,0.023752419572857533,0.4,0.0002,Bearish,learned_global
+2026-01-24,14,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002467,0.002089,-0.1532225374949331,0.015122253749493308,0.4,0.0002,Bearish,learned_global
+2026-01-24,14,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,22.193,32.441,0.4617672238994277,-0.046376722389942775,0.4,0.0002,Bearish,learned_global
+2026-01-24,14,Test,sticky_l_s,eligible_sensitivity,virtuals-protocol,VIRTUAL,Virtuals Protocol,Short,-0.1,0.7667,0.5774,-0.2469023085952785,0.024490230859527853,0.4,0.0002,Bearish,learned_global
+2026-02-07,14,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2778,0.2906,0.04607631389488853,0.004307631389488854,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,14,Test,sticky_l_s,eligible_sensitivity,world-liberty-financial,WLFI,World Liberty Financial,Long,0.1,0.1048,0.1146,0.09351145038167918,0.009051145038167919,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,14,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,639.93,614.8,-0.03926992014751618,-0.004226992014751618,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,14,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,52.7741270950109,50.70439996373134,-0.039218595270242185,-0.004221859527024218,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,527.0,570.7,0.08292220113852,0.007992220113852,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,14,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002089,0.002022,-0.032072762087123174,0.0029072762087123177,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,14,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,32.441,29.015,-0.10560710212385571,0.010260710212385572,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,14,Test,sticky_l_s,eligible_sensitivity,virtuals-protocol,VIRTUAL,Virtuals Protocol,Short,-0.1,0.5774,0.6235,0.07984066505022525,-0.008284066505022525,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,14,Test,sticky_l_s,eligible_sensitivity,axie-infinity,AXS,Axie Infinity,Short,-0.1,1.264,1.308,0.034810126582278444,-0.0037810126582278445,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-07,14,Test,sticky_l_s,eligible_sensitivity,ondo-finance,ONDO,Ondo Finance (Combined),Short,-0.1,0.2579,0.2625,0.017836370686312497,-0.0020836370686312497,0.6,0.00030000000000000003,Bearish,learned_global
+2026-02-21,14,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,614.8,611.98,-0.004586857514638831,-0.0008586857514638832,0.8,0.0004,Bearish,learned_global
+2026-02-21,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,67643.4,65971.2,-0.02472081533453374,-0.0028720815334533746,0.8,0.0004,Bearish,learned_global
+2026-02-21,14,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2906,0.2891,-0.005161734342739144,-0.0009161734342739145,0.8,0.0004,Bearish,learned_global
+2026-02-21,14,Test,sticky_l_s,eligible_sensitivity,world-liberty-financial,WLFI,World Liberty Financial,Long,0.1,0.1146,0.0974,-0.1500872600349039,-0.015408726003490391,0.8,0.0004,Bearish,learned_global
+2026-02-21,14,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,50.70439996373134,53.83316106203296,0.06170590916251073,0.005770590916251073,0.8,0.0004,Bearish,learned_global
+2026-02-21,14,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.002022,0.001917,-0.05192878338278928,0.004792878338278928,0.8,0.0004,Bearish,learned_global
+2026-02-21,14,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,29.015,30.685,0.05755643632603813,-0.006155643632603814,0.8,0.0004,Bearish,learned_global
+2026-02-21,14,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,117.95,105.53,-0.1052988554472234,0.01012988554472234,0.8,0.0004,Bearish,learned_global
+2026-02-21,14,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.491,3.661,0.04869664852477795,-0.005269664852477796,0.8,0.0004,Bearish,learned_global
+2026-02-21,14,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.1,0.0988,-0.01200000000000001,0.0008000000000000012,0.8,0.0004,Bearish,learned_global
+2026-03-07,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,443.1,467.4,0.0548408937034528,0.00528408937034528,0.4,0.0002,Bearish,learned_global
+2026-03-07,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,65971.2,67859.0,0.028615517074117136,0.0026615517074117137,0.4,0.0002,Bearish,learned_global
+2026-03-07,14,Test,sticky_l_s,eligible_sensitivity,chain:canton,CC,Canton,Long,0.1,0.14987,0.1423,-0.05051044238339886,-0.005251044238339886,0.4,0.0002,Bearish,learned_global
+2026-03-07,14,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,611.98,626.41,0.023579201934703642,0.002157920193470364,0.4,0.0002,Bearish,learned_global
+2026-03-07,14,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2891,0.3104,0.07367692839847795,0.007167692839847795,0.4,0.0002,Bearish,learned_global
+2026-03-07,14,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.001917,0.001764,-0.07981220657277,0.0077812206572769995,0.4,0.0002,Bearish,learned_global
+2026-03-07,14,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,30.685,38.342,0.24953560371517036,-0.025153560371517038,0.4,0.0002,Bearish,learned_global
+2026-03-07,14,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,105.53,106.32,0.00748602293186762,-0.000948602293186762,0.4,0.0002,Bearish,learned_global
+2026-03-07,14,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.661,3.471,-0.051898388418464836,0.004989838841846484,0.4,0.0002,Bearish,learned_global
+2026-03-07,14,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.0988,0.0955,-0.0334008097165992,0.00314008097165992,0.4,0.0002,Bearish,learned_global
+2026-03-21,14,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.3104,0.3189,0.027384020618556715,0.0022384020618556716,1.0,0.0005,Bearish,learned_global
+2026-03-21,14,Test,sticky_l_s,eligible_sensitivity,chain:bittorrent,BTT,Bittorrent,Long,0.1,3.357322349188872e-07,3.1427065681623474e-07,-0.06392468720746325,-0.006892468720746326,1.0,0.0005,Bearish,learned_global
+2026-03-21,14,Test,sticky_l_s,eligible_sensitivity,defi-swap,CRO,Defi Swap,Long,0.1,0.07465117111953973,0.06981696508688659,-0.06475726984794483,-0.006975726984794484,1.0,0.0005,Bearish,learned_global
+2026-03-21,14,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Long,0.1,0.2506,0.2508,0.0007980845969675077,-0.00042019154030324923,1.0,0.0005,Bearish,learned_global
+2026-03-21,14,Test,sticky_l_s,eligible_sensitivity,rain,RAIN,Rain,Long,0.1,0.00843228640670538,0.00738289117358299,-0.12444966673426883,-0.012944966673426884,1.0,0.0005,Bearish,learned_global
+2026-03-21,14,Test,sticky_l_s,eligible_sensitivity,pump,PUMP,Pump (Combined),Short,-0.1,0.001764,0.001694,-0.03968253968253965,0.0034682539682539654,1.0,0.0005,Bearish,learned_global
+2026-03-21,14,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,38.342,36.844,-0.039069427781544985,0.0034069427781544983,1.0,0.0005,Bearish,learned_global
+2026-03-21,14,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.471,3.148,-0.09305675597810426,0.008805675597810425,1.0,0.0005,Bearish,learned_global
+2026-03-21,14,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.0955,0.0806,-0.15602094240837694,0.015102094240837693,1.0,0.0005,Bearish,learned_global
+2026-03-21,14,Test,sticky_l_s,eligible_sensitivity,official-trump,TRUMP,Official Trump,Short,-0.1,3.194,2.878,-0.09893550407013141,0.00939355040701314,1.0,0.0005,Bearish,learned_global
+2026-04-04,14,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,51.48844165768005,55.05213416881053,0.06921344667651086,0.006321344667651087,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-04-04,14,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,601.5,616.06,0.0242061512884455,0.0018206151288445499,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-04-04,14,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,69034.18,73801.79,0.06906158659377137,0.006306158659377138,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-04-04,14,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,9.06,9.0,-0.0066225165562914245,-0.0012622516556291428,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-04-04,14,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.3189,0.3291,0.031984948259642376,0.0025984948259642373,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-04-04,14,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,36.844,40.703,0.10473889914232992,-0.011073889914232993,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-04-04,14,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.148,3.231,0.026365946632782578,-0.003236594663278258,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-04-04,14,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.0806,0.1125,0.3957816377171215,-0.040178163771712155,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-04-04,14,Test,sticky_l_s,eligible_sensitivity,chain:algorand,ALGO,Algorand,Short,-0.1,0.1215,0.1015,-0.1646090534979423,0.01586090534979423,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-04-04,14,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Short,-0.1,0.2508,0.2424,-0.03349282296650724,0.002749282296650724,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-04-18,14,Test,sticky_l_s,eligible_sensitivity,chain:canton,CC,Canton,Long,0.1,0.14719,0.1477,0.003464909300903596,-5.350906990964039e-05,0.8,0.0004,Bearish,learned_global
+2026-04-18,14,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.3291,0.3385,0.028562746885445245,0.0024562746885445244,0.8,0.0004,Bearish,learned_global
+2026-04-18,14,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,616.06,617.27,0.0019640944063890053,-0.00020359055936109948,0.8,0.0004,Bearish,learned_global
+2026-04-18,14,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,55.05213416881053,58.64241432598286,0.06521600318278642,0.006121600318278642,0.8,0.0004,Bearish,learned_global
+2026-04-18,14,Test,sticky_l_s,eligible_sensitivity,world-liberty-financial,WLFI,World Liberty Financial,Long,0.1,0.0773,0.0584,-0.24450194049159113,-0.024850194049159117,0.8,0.0004,Bearish,learned_global
+2026-04-18,14,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,40.703,41.54,0.020563594821020548,-0.002456359482102055,0.8,0.0004,Bearish,learned_global
+2026-04-18,14,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.231,3.234,0.0009285051067782213,-0.0004928505106778222,0.8,0.0004,Bearish,learned_global
+2026-04-18,14,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.1125,0.1005,-0.10666666666666669,0.01026666666666667,0.8,0.0004,Bearish,learned_global
+2026-04-18,14,Test,sticky_l_s,eligible_sensitivity,chain:arbitrum,ARB,Arbitrum,Short,-0.1,0.1215,0.1173,-0.03456790123456788,0.0030567901234567875,0.8,0.0004,Bearish,learned_global
+2026-04-18,14,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,90.28,92.43,0.023814798404962367,-0.002781479840496237,0.8,0.0004,Bearish,learned_global
+2025-11-01,30,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2981,0.281,-0.05736330090573616,-0.006236330090573616,1.0,0.0005,Bullish,learned_global
+2025-11-01,30,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,1083.25,876.61,-0.19075928917609042,-0.019575928917609044,1.0,0.0005,Bullish,learned_global
+2025-11-01,30,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,110540.68,91277.88,-0.1742598290511691,-0.017925982905116912,1.0,0.0005,Bullish,learned_global
+2025-11-01,30,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,18.8,13.62,-0.27553191489361706,-0.02805319148936171,1.0,0.0005,Bullish,learned_global
+2025-11-01,30,Test,sticky_l_s,eligible_sensitivity,chain:ab,AB,AB,Long,0.1,0.006191296365349833,0.005315651653472392,-0.14143156137349,-0.014643156137349001,1.0,0.0005,Bullish,learned_global
+2025-11-01,30,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.3745,0.2696,-0.2801068090787717,0.027510680907877172,1.0,0.0005,Bullish,learned_global
+2025-11-01,30,Test,sticky_l_s,eligible_sensitivity,curve-finance,CRV,Curve Finance (Combined),Short,-0.1,0.4788,0.387,-0.19172932330827064,0.018672932330827063,1.0,0.0005,Bullish,learned_global
+2025-11-01,30,Test,sticky_l_s,eligible_sensitivity,lido,LDO,Lido,Short,-0.1,0.8808,0.6161,-0.30052225249772935,0.029552225249772936,1.0,0.0005,Bullish,learned_global
+2025-11-01,30,Test,sticky_l_s,eligible_sensitivity,celestia,TIA,Celestia,Short,-0.1,0.964,0.622,-0.3547717842323651,0.03497717842323651,1.0,0.0005,Bullish,learned_global
+2025-11-01,30,Test,sticky_l_s,eligible_sensitivity,pancakeswap,CAKE,Pancakeswap (Combined),Short,-0.1,2.489,2.38,-0.043792687826436305,0.003879268782643631,1.0,0.0005,Bullish,learned_global
+2025-12-01,30,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,91277.88,88839.04,-0.026718850174872744,-0.0030718850174872745,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-01,30,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Long,0.1,0.4335,0.3565,-0.17762399077277968,-0.01816239907727797,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-01,30,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,876.61,864.39,-0.013940064566911214,-0.0017940064566911215,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-01,30,Test,sticky_l_s,eligible_sensitivity,chain:avalanche,AVAX,Avalanche,Long,0.1,13.62,13.59,-0.0022026431718060735,-0.0006202643171806074,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-01,30,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.281,0.2871,0.02170818505338068,0.001770818505338068,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-01,30,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.2696,0.2176,-0.19287833827893186,0.018887833827893188,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-01,30,Test,sticky_l_s,eligible_sensitivity,celestia,TIA,Celestia,Short,-0.1,0.622,0.4981,-0.1991961414790997,0.01951961414790997,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-01,30,Test,sticky_l_s,eligible_sensitivity,grass,GRASS,Grass,Short,-0.1,0.3102,0.2989,-0.03642811089619591,0.003242811089619591,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-01,30,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,5.92,5.809,-0.018749999999999933,0.0014749999999999935,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-01,30,Test,sticky_l_s,eligible_sensitivity,aerodrome,AERO,Aerodrome (Combined),Short,-0.1,0.6572,0.4705,-0.28408399269628737,0.028008399269628736,0.7999999999999999,0.0004,Bearish,learned_global
+2025-12-31,30,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,56.34764813319366,51.30740218315541,-0.08944909179038307,-0.009544909179038307,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2025-12-31,30,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,88839.04,78741.09,-0.11366568121402476,-0.011966568121402477,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2025-12-31,30,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,864.39,781.38,-0.09603304064137719,-0.01020330406413772,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2025-12-31,30,Test,sticky_l_s,eligible_sensitivity,chain:bittorrent,BTT,Bittorrent,Long,0.1,3.862361403212637e-07,3.822090114623045e-07,-0.010426597717162145,-0.0016426597717162147,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2025-12-31,30,Test,sticky_l_s,eligible_sensitivity,defi-swap,CRO,Defi Swap,Long,0.1,0.09062372478730188,0.08357787677112254,-0.07774838247618132,-0.008374838247618133,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2025-12-31,30,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.2176,0.1387,-0.36259191176470584,0.03565919117647058,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2025-12-31,30,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,5.809,3.96,-0.31829919091065595,0.031229919091065598,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2025-12-31,30,Test,sticky_l_s,eligible_sensitivity,chain:0g,0G,0G,Short,-0.1,0.979,0.748,-0.2359550561797753,0.022995505617977533,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2025-12-31,30,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,24.243,31.012,0.27921461865280706,-0.028521461865280706,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2025-12-31,30,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,148.93,129.05,-0.133485530114819,0.012748553011481902,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-01-30,30,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,507.5,445.3,-0.12256157635467979,-0.01265615763546798,0.7999999999999999,0.0004,Bearish,learned_global
+2026-01-30,30,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,51.30740218315541,48.39734253689014,-0.05671812491844819,-0.006071812491844819,0.7999999999999999,0.0004,Bearish,learned_global
+2026-01-30,30,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.2866,0.2832,-0.011863224005582707,-0.0015863224005582706,0.7999999999999999,0.0004,Bearish,learned_global
+2026-01-30,30,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,781.38,637.79,-0.18376462156697126,-0.018776462156697128,0.7999999999999999,0.0004,Bearish,learned_global
+2026-01-30,30,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,78741.09,68830.06,-0.12586859033828457,-0.012986859033828457,0.7999999999999999,0.0004,Bearish,learned_global
+2026-01-30,30,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.96,3.929,-0.007828282828282851,0.00038282828282828514,0.7999999999999999,0.0004,Bearish,learned_global
+2026-01-30,30,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,31.012,32.809,0.0579453114923254,-0.006194531149232541,0.7999999999999999,0.0004,Bearish,learned_global
+2026-01-30,30,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,129.05,122.21,-0.05300271212708263,0.004900271212708263,0.7999999999999999,0.0004,Bearish,learned_global
+2026-01-30,30,Test,sticky_l_s,eligible_sensitivity,melania-meme,MELANIA,Melania Meme,Short,-0.1,0.128,0.1093,-0.14609375000000002,0.014209375000000003,0.7999999999999999,0.0004,Bearish,learned_global
+2026-01-30,30,Test,sticky_l_s,eligible_sensitivity,axie-infinity,AXS,Axie Infinity,Short,-0.1,1.818,1.253,-0.31078107810781086,0.030678107810781088,0.7999999999999999,0.0004,Bearish,learned_global
+2026-03-01,30,Test,sticky_l_s,eligible_sensitivity,chain:canton,CC,Canton,Long,0.1,0.15914,0.14246,-0.10481337187382178,-0.01078133718738218,0.6,0.00030000000000000003,Bearish,learned_global
+2026-03-01,30,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,48.39734253689014,52.35713373485547,0.08181836006691978,0.007881836006691978,0.6,0.00030000000000000003,Bearish,learned_global
+2026-03-01,30,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,637.79,610.81,-0.042302325216764136,-0.004530232521676413,0.6,0.00030000000000000003,Bearish,learned_global
+2026-03-01,30,Test,sticky_l_s,eligible_sensitivity,chain:bitcoin,BTC,Bitcoin,Long,0.1,68830.06,68113.92,-0.010404465723261036,-0.0013404465723261035,0.6,0.00030000000000000003,Bearish,learned_global
+2026-03-01,30,Test,sticky_l_s,eligible_sensitivity,chain:bitcoincash,BCH,Bitcoincash,Long,0.1,445.3,455.1,0.022007635302043527,0.0019007635302043528,0.6,0.00030000000000000003,Bearish,learned_global
+2026-03-01,30,Test,sticky_l_s,eligible_sensitivity,uniswap,UNI,Uniswap (Combined),Short,-0.1,3.929,3.567,-0.09213540341053694,0.008913540341053695,0.6,0.00030000000000000003,Bearish,learned_global
+2026-03-01,30,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,32.809,36.025,0.09802188423908076,-0.010102188423908077,0.6,0.00030000000000000003,Bearish,learned_global
+2026-03-01,30,Test,sticky_l_s,eligible_sensitivity,aave,AAVE,Aave (Combined),Short,-0.1,122.21,98.1,-0.19728336470010643,0.019428336470010642,0.6,0.00030000000000000003,Bearish,learned_global
+2026-03-01,30,Test,sticky_l_s,eligible_sensitivity,grass,GRASS,Grass,Short,-0.1,0.3048,0.2841,-0.06791338582677164,0.0064913385826771645,0.6,0.00030000000000000003,Bearish,learned_global
+2026-03-01,30,Test,sticky_l_s,eligible_sensitivity,aethir,ATH,Aethir,Short,-0.1,0.006331,0.00713,0.12620439109145476,-0.012920439109145476,0.6,0.00030000000000000003,Bearish,learned_global
+2026-03-31,30,Test,sticky_l_s,eligible_sensitivity,whitebit,WBT,WhiteBIT,Long,0.1,52.35713373485547,57.19492773858113,0.09239990157262978,0.008639990157262979,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-03-31,30,Test,sticky_l_s,eligible_sensitivity,chain:bsc,BNB,BSC,Long,0.1,610.81,615.34,0.0074163815261703014,0.00014163815261703004,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-03-31,30,Test,sticky_l_s,eligible_sensitivity,defi-swap,CRO,Defi Swap,Long,0.1,0.07050551244140431,0.06843168115673873,-0.029413746710785227,-0.003541374671078523,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-03-31,30,Test,sticky_l_s,eligible_sensitivity,tron,TRX,Tron,Long,0.1,0.3156,0.327,0.03612167300380231,0.003012167300380231,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-03-31,30,Test,sticky_l_s,eligible_sensitivity,rain,RAIN,Rain,Long,0.1,0.008146284475187424,0.007834350111008989,-0.03829161197703679,-0.004429161197703679,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-03-31,30,Test,sticky_l_s,eligible_sensitivity,hyperliquid,HYPE,Hyperliquid (Combined),Short,-0.1,36.025,41.15,0.142262317834837,-0.0148262317834837,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-03-31,30,Test,sticky_l_s,eligible_sensitivity,aethir,ATH,Aethir,Short,-0.1,0.00713,0.005809,-0.185273492286115,0.0179273492286115,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-03-31,30,Test,sticky_l_s,eligible_sensitivity,ondo-finance,ONDO,Ondo Finance (Combined),Short,-0.1,0.2702,0.2679,-0.008512213175425498,0.0002512213175425497,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-03-31,30,Test,sticky_l_s,eligible_sensitivity,ethena,ENA,Ethena (Combined),Short,-0.1,0.0902,0.1021,0.13192904656319282,-0.013792904656319282,1.2000000000000002,0.0006000000000000002,Bearish,learned_global
+2026-03-31,30,Test,sticky_l_s,eligible_sensitivity,chain:cardano,ADA,Cardano,Short,-0.1,0.2484,0.2482,-0.0008051529790660261,-0.0005194847020933975,1.2000000000000002,0.0006000000000000002,Bearish,learned_global

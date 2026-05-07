@@ -1,0 +1,39 @@
+{
+  "artifact_name_uses_May24toMay26": true,
+  "no_pre_may_2024_rows_in_reported_dataset": true,
+  "train_boundary": {
+    "start": "2024-05-01",
+    "end": "2025-04-30"
+  },
+  "validation_boundary": {
+    "start": "2025-05-01",
+    "end": "2025-10-31"
+  },
+  "test_boundary": {
+    "start": "2025-11-01",
+    "end": "label-complete by horizon"
+  },
+  "model_selection_period": "Validation only",
+  "selected_model_chosen_before_test": true,
+  "fundamentals_and_flows_lagged_1d": true,
+  "static_current_snapshot_fields_used_historically": {
+    "price": false,
+    "volume_24h": false,
+    "fdv": false,
+    "market_cap": "Current circulating-supply proxy is used only when true historical market cap is unavailable."
+  },
+  "universe_uses_historical_mcap_volume": true,
+  "btc_regime_uses_completed_weekly_values": true,
+  "forward_return_alignment": {
+    "7d": true,
+    "14d": true,
+    "30d": true
+  },
+  "label_complete_test_end_by_horizon": {
+    "7d": "2026-04-27",
+    "14d": "2026-04-20",
+    "30d": "2026-04-04"
+  },
+  "dataset_rows": 150675,
+  "unique_tokens": 205
+}
