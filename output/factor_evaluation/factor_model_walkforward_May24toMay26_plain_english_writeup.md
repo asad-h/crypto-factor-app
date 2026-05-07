@@ -63,19 +63,20 @@ The reporting-only sticky L/S basket did better in the untouched test period, bu
 
 | Holding period | Rebalances | Total return | Sharpe | Max drawdown | Hit rate | Excess vs BTC |
 |---|---:|---:|---:|---:|---:|---:|
-| 7D | 26 | +2.2% | 0.32 | -6.7% | 57.7% | +31.1% |
-| 14D | 13 | +8.3% | 1.43 | -4.2% | 61.5% | +37.2% |
-| 30D | 6 | +10.2% | 2.46 | -1.0% | 66.7% | +39.5% |
+| 7D | 26 | +18.5% | 2.00 | -4.6% | 61.5% | +47.4% |
+| 14D | 13 | +22.2% | 3.43 | -2.6% | 76.9% | +51.1% |
+| 30D | 6 | +24.8% | 4.39 | 0.0% | 100.0% | +54.1% |
 
 This is encouraging as a diagnostic, but it is not a valid reason to select the model because the validation and rolling gates failed before test.
 
 ## Monthly L/S Basket Read
 
-The monthly 14D basket table shows the reporting-only L/S constituents and realized forward returns. It is useful for understanding concentration and stability:
+The monthly 14D basket table shows the reporting-only L/S constituents and realized forward returns. It is useful for understanding concentration and stability.
 
 - Longs were fairly consistent: BTC, BNB, WBT, TRX, ADA, and CC appeared repeatedly.
-- Shorts became stickier by design: HYPE, ENA, AAVE, UNI, and related bottom-ranked names persisted across months.
-- The monthly 14D net returns were mixed but positive overall in test: +0.6%, +4.0%, +0.3%, -0.9%, -1.7%, +0.1%.
+- HYPE is explicitly banned from short baskets, so it is no longer allowed to appear on the short side even if it ranks poorly.
+- Shorts became stickier by design: ENA, AAVE, UNI, ATH, AVAX, and related bottom-ranked names persisted across months.
+- The monthly 14D net returns were positive in test: +0.6%, +4.6%, +2.8%, +0.7%, +0.3%, +1.1%.
 
 ## What "Factor Improvement: 0%" Means
 

@@ -1,7 +1,7 @@
 family,regime,horizon,mean_ic,n_periods
-fundamentals,Bullish,7,0.02920609379628876,246
-fundamentals,Bullish,14,0.04537344294310475,246
-fundamentals,Bullish,30,0.05861632465362836,246
+fundamentals,Bullish,7,0.029281550999584478,246
+fundamentals,Bullish,14,0.04546892976782002,246
+fundamentals,Bullish,30,0.05870946886057895,246
 fundamentals,Bearish,7,0.03446281436510194,119
 fundamentals,Bearish,14,0.04877490675896849,119
 fundamentals,Bearish,30,0.0048587826581650935,119

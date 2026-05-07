@@ -14,6 +14,7 @@ from crypto_factor_model.research.constants import (
     FAMILIES,
     HORIZONS,
     MAX_WEIGHT_PER_FAMILY,
+    NEVER_SHORT_TOKENS,
     PRIMARY_HORIZON,
     TEST_START,
     TRAIN_END,
@@ -99,6 +100,14 @@ def _eligible_panel(ctx: EvaluationContext, eligible_name: str) -> pd.DataFrame:
     if eligible_name == "eligible_sensitivity":
         return ctx.eligible_sensitivity
     raise ValueError(f"Unknown eligible universe: {eligible_name}")
+
+
+def _never_short_ids(ctx: EvaluationContext) -> list[str]:
+    if not NEVER_SHORT_TOKENS or "token" not in ctx.metadata.columns:
+        return []
+    tokens = ctx.metadata["token"].astype(str).str.upper()
+    blocked = {token.upper() for token in NEVER_SHORT_TOKENS}
+    return tokens[tokens.isin(blocked)].index.astype(str).tolist()
 
 
 def _ic_for_panel(signal: pd.DataFrame, returns: pd.DataFrame, dates: pd.DatetimeIndex) -> list[float]:
@@ -374,16 +383,21 @@ def run_portfolio_backtest(
     constituent_rows: list[dict[str, Any]] = []
     prev_weights = pd.Series(dtype=float)
     cost_rate = cost_bps / 10000.0
+    never_short_ids = _never_short_ids(ctx)
 
     for dt in dates:
         if dt not in composite.index or dt not in ctx.forward_returns[horizon].index:
             continue
         regime = ctx.regime.reindex([dt]).iloc[0] if dt in ctx.regime.index else None
+        shortable_row = ctx.shortable.reindex(composite.index).loc[dt].copy()
+        if never_short_ids:
+            blocked_ids = [rid for rid in never_short_ids if rid in shortable_row.index]
+            shortable_row.loc[blocked_ids] = False
         weights = construct_positions(
             composite.loc[dt],
             ctx.forward_returns[horizon].loc[dt],
             eligible.reindex(composite.index).loc[dt],
-            ctx.shortable.reindex(composite.index).loc[dt],
+            shortable_row,
             variant,
             regime=regime,
             prev_weights=prev_weights,

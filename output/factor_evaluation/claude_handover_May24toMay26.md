@@ -1,10 +1,25 @@
 # Claude Handover: May24toMay26 Crypto Factor Research
 
-## Context
+## Research Objectives
 
-This repo now has an independent research-only crypto factor evaluation layer. It is intentionally separate from Streamlit/dashboard production code.
+The goal of this research layer is to evaluate whether a liquid crypto long/short factor strategy has enough historical evidence to justify further development.
 
-Do not modify dashboard files unless the user explicitly asks for production integration. The relevant code is under:
+The specific objectives are:
+
+- Build an auditable historical dataset from May 1, 2024 through the latest label-complete May 2026 data.
+- Avoid obvious leakage: lag fundamentals/flows, use only as-of signal values, enter at `t+1` close, exit at `t+h+1` close, and keep test labels out of model selection.
+- Compare factor families: fundamentals, momentum, flows, and factor improvement.
+- Compare model candidates: current composite, equal-family, heuristic weights, learned global weights, and regime-specific weights.
+- Test whether BTC 20-week moving-average regimes improve signal weighting or exposure rules.
+- Evaluate long/short, long-only, short-only, regime-switching, and sticky L/S variants.
+- Promote the `$10M` trailing 7D volume universe to a formal candidate, not just an appendix sensitivity.
+- Produce enough artifacts for a non-technical reviewer to understand the conclusion without reading code.
+
+This is research-only. It is not Streamlit/dashboard production work.
+
+## Where To Work
+
+Relevant files:
 
 - `crypto_factor_model/research/`
 - `test_research_walkforward.py`
@@ -12,23 +27,23 @@ Do not modify dashboard files unless the user explicitly asks for production int
 - `cache/research/factor_research_May24toMay26.parquet`
 - `output/factor_evaluation/`
 
+Do not modify dashboard files unless the user explicitly asks for production integration.
+
 The CoinGecko key used for the refresh was handled through runtime configuration and was not persisted in repo files.
 
-## Current Research State
+## Current Dataset And Outputs
 
 Main dataset:
 
 - `cache/research/factor_research_May24toMay26.parquet`
 - Shape from latest verification: `150675` rows x `130` columns
-- Coverage: `2024-05-01` through `2026-05-05`
+- Coverage: May 1, 2024 through May 5, 2026
 - Universe: 205 tokens
 
 Executed notebook:
 
 - `notebooks/factor_model_walkforward_May24toMay26.ipynb`
-- 40 cells
-- 22 code cells with outputs
-- Includes monthly L/S basket table section
+- Includes coverage, leakage checks, BTC regime chart, signal ICs, validation selection, rolling folds, untouched test results, BTC-relative results, constituents, and monthly L/S basket table.
 
 Plain-English summary:
 
@@ -38,31 +53,26 @@ Monthly L/S basket table:
 
 - `output/factor_evaluation/ls_basket_monthly_May24toMay26.csv`
 
-## What Changed Most Recently
+## Most Recent Rule Change: Never Short HYPE
 
-The latest update implemented the user-requested steps:
+User explicitly requested that HYPE never appear in the short basket.
 
-1. Stricter selector:
-   - Requires positive validation return.
-   - Requires positive validation Sharpe.
-   - Requires positive average rolling-fold return.
-   - Requires at least 3 positive rolling folds.
-   - If no candidate passes, it reports `NO_STRICT_PASS` instead of forcing a weak recommendation.
+Implementation:
 
-2. L/S-first selection:
-   - `always_l_s`, `sticky_l_s`, and `regime_aware_l_s` are the main strategy variants.
-   - Long-only, short-only, and regime-switch candidates are still visible in diagnostics, but they cannot win weakly.
+- `NEVER_SHORT_TOKENS = ("HYPE",)` in `crypto_factor_model/research/constants.py`
+- `run_portfolio_backtest()` applies the exclusion to the shortable row before constructing positions.
+- This affects all short-producing variants, including always L/S, sticky L/S, short-only, bearish regime-switch, and regime-aware L/S.
+- HYPE can still be evaluated as an asset and can still be long if ranked high enough; it is only banned from short positions.
 
-3. `$10M` universe as a formal candidate:
-   - `eligible_sensitivity` is evaluated in validation/model selection, not just appendix sensitivity.
+Verification after regeneration:
 
-4. Sticky L/S basket:
-   - Added `sticky_l_s`.
-   - Previous shorts are retained if they remain inside the short rank buffer, reducing churn.
+- `output/factor_evaluation/constituents_May24toMay26.csv`: 0 rows where `token == HYPE` and `side == Short`
+- `output/factor_evaluation/ls_basket_monthly_May24toMay26.csv`: 0 rows with HYPE in `short_tokens`
+- Synthetic test added: HYPE is bottom-ranked but does not enter the short basket.
 
-## Current Result
+## Current Model Result
 
-The current stricter selector says:
+The stricter selector still says:
 
 - `selection_status`: `NO_STRICT_PASS`
 - `strict_gate_passed`: `false`
@@ -81,24 +91,72 @@ Why it failed selection:
 - Validation return: `-4.8%`
 - Validation Sharpe: `-0.04`
 - Rolling positive folds: `1 / 4`
-- Rolling average return: `-9.0%`
+- Rolling average return: `-10.7%`
+- Rolling average Sharpe: `-0.68`
 
 Do not describe this as selected for production. It is a diagnostic basket only.
 
-## Monthly L/S Basket Snapshot
+## Current Issues With The Model
 
-The latest 14D monthly diagnostic basket table shows:
+The main issues are:
+
+- Validation is negative. The best reporting L/S candidate loses money in the validation window.
+- Rolling support is weak. Only 1 of 4 purged rolling folds is positive.
+- Test-period improvement is not selection evidence. The HYPE-excluded diagnostic basket performs well in test, but that cannot rescue a model that failed validation.
+- Regime awareness has not proven robust. BTC 20W regimes are useful for audit/context, but the current regime-specific candidates do not clear the strict gate.
+- Factor breadth is narrow. Learned-global weights concentrate in fundamentals and momentum; flows and factor improvement get 0%.
+- Shortability is approximate. Binance USD-M availability is treated as a proxy, not a full historical borrow/listing calendar.
+- Survivorship bias remains. The asset master is seeded from the current mapped universe.
+- Some historical mcap/FDV coverage still relies on proxies where true historical supply data is unavailable.
+- Monthly basket stability is only moderate. Sticky shorts reduce churn, but basket membership still changes materially.
+- The current selector is conservative by design. It may reject baskets that look good in test, which is correct but may feel unsatisfying.
+
+## What To Improve Next
+
+Recommended next research work:
+
+- Add a formal "no trade" or "cash" outcome when strict gates fail.
+- Add sector/token exposure caps so large-cap infrastructure names do not dominate repeatedly.
+- Build a real historical shortability/listing calendar instead of relying on current Binance USD-M availability.
+- Add a turnover-aware rank objective directly into factor scoring, not only basket construction.
+- Investigate why validation is weak but HYPE-excluded test is strong. Treat this as a hypothesis, not a conclusion.
+- Expand robustness checks: subperiods, volatility regimes, BTC drawdown regimes, and excluding single high-impact names.
+- Revisit factor improvement. It is currently 0%, but may need a different definition or slower lookback.
+- Add outlier and event filters for newly listed/meme/event-driven tokens.
+- Stress-test transaction costs and slippage beyond the current 50 bps assumption.
+- Separate "model quality" diagnostics from "portfolio construction" diagnostics more clearly.
+
+## What To Independently Verify
+
+Before anyone trusts or productionizes this, independently verify:
+
+- The HYPE short ban is enforced in all short-producing variants and all regenerated artifacts.
+- Forward-return alignment: signal at `t`, entry at `t+1` close, exit at `t+h+1` close.
+- BTC regime as-of rule: signal date uses the latest completed weekly BTC close and trailing 20W MA only.
+- No test-period labels influence signal selection, dedupe, weights, hyperparameters, model choice, or basket rules.
+- Rolling folds have a purge gap of `horizon + 1` days and never overlap the untouched test period.
+- `$10M` universe membership uses historical trailing volume, not current volume backfills.
+- Historical mcap/volume/FDV fields are not silently backfilled from current snapshots.
+- Stable/wrapped/pegged/tokenized treasury/basket/commodity-like exclusions remain active.
+- Shortability proxy limitations are clearly disclosed.
+- Monthly basket returns match constituent entry/exit prices and cost assumptions.
+- BTC-relative metrics are recomputed independently from raw returns.
+- Notebook outputs match the CSV/JSON artifacts exactly.
+
+## Monthly HYPE-Excluded L/S Basket Snapshot
+
+The latest 14D monthly diagnostic basket table is:
 
 | Month | Longs | Shorts | Net return |
 |---|---|---|---:|
 | 2025-11 | ADA, BTC, BNB, AVAX, BTT | GRASS, UNI, AERO, AAVE, PUMP | +0.6% |
-| 2025-12 | WBT, BTC, BNB, BTT, CRO | UNI, AAVE, 0G, HYPE, ENA | +4.0% |
-| 2026-01 | BCH, WBT, TRX, BNB, BTC | UNI, AAVE, HYPE, ENA, JTO | +0.3% |
-| 2026-02 | WBT, CC, BNB, BTC, TRX | UNI, AAVE, HYPE, ENA, ATH | -0.9% |
-| 2026-03 | WBT, BNB, CRO, TRX, RAIN | HYPE, ENA, ATH, ONDO, ADA | -1.7% |
-| 2026-04 | TRX, WBT, CC, BNB, ADA | HYPE, ENA, ARB, AAVE, UNI | +0.1% |
+| 2025-12 | WBT, BTC, BNB, BTT, CRO | UNI, AAVE, 0G, ENA, APT | +4.6% |
+| 2026-01 | BCH, WBT, TRX, BNB, BTC | UNI, AAVE, ENA, APT, JTO | +2.8% |
+| 2026-02 | WBT, CC, BNB, BTC, TRX | UNI, AAVE, ENA, ATH, PUMP | +0.7% |
+| 2026-03 | WBT, BNB, CRO, TRX, RAIN | ENA, ATH, ONDO, ADA, AVAX | +0.3% |
+| 2026-04 | TRX, WBT, CC, BNB, ADA | ENA, AVAX, ARB, AAVE, UNI | +1.1% |
 
-Interpretation: longs are moderately stable; shorts are now intentionally stickier but still rotate when bottom ranks change.
+Interpretation: HYPE is no longer shorted. The replacement shorts make the test-period diagnostic basket look better, but that is not valid selection evidence because the validation and rolling gates still failed.
 
 ## Key Commands
 
@@ -125,22 +183,10 @@ Full data refresh, slower and API-dependent:
 These checks were run after the latest update:
 
 - `py_compile` for research modules and tests passed.
-- `python -m unittest test_research_walkforward.py` passed: 10 tests OK.
-- Notebook was regenerated and contains non-empty monthly L/S section.
-- Secret scan for the CoinGecko key fragments returned no matches.
+- `python -m unittest test_research_walkforward.py` passed: 11 tests OK.
+- Research outputs and notebook were regenerated with `--from-dataset`.
+- HYPE short scan returned 0 HYPE short rows in constituents and monthly basket outputs.
 
-## Important Caveats
+## Current Bottom Line
 
-- The stricter gate intentionally refused to recommend a model.
-- The positive untouched-test performance of the diagnostic sticky L/S basket must not be used to select or tune the model.
-- Full refresh can hang or slow down in upstream data stages. Prefer `--from-dataset` for code/evaluation iteration.
-- `cache/research/` contains local raw CoinGecko cache files, but only the main long-form research parquet needs to be treated as the research artifact.
-- There are unrelated dirty files in the working tree from outside this research task; do not revert or include them unless the user asks.
-
-## Good Next Research Steps
-
-- Study why validation and rolling folds are weak while test was better.
-- Add a "no trade" or "cash" option when validation gates fail.
-- Explore turnover-aware ranking directly in the score rather than only sticky basket construction.
-- Add token/sector exposure caps to reduce repeated large-cap dominance.
-- Revisit shortability history; current Binance USD-M availability is still a proxy.
+Keep the research layer, keep the HYPE short ban, and keep the `$10M` sticky L/S basket as a diagnostic object. Do not call the model selected yet. The right next step is robustness and independent verification, not production integration.

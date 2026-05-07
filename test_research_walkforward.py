@@ -214,6 +214,48 @@ class ResearchWalkForwardTests(unittest.TestCase):
         first_constituents = constituents[constituents["rebalance_date"].eq(portfolio.iloc[0]["date"])]
         self.assertEqual(len(first_constituents), 10)
 
+    def test_hype_is_never_short_even_when_bottom_ranked(self):
+        dates = pd.date_range("2024-05-01", periods=80, freq="D")
+        tokens = ["hyperliquid", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
+        scores = pd.Series(
+            {
+                "hyperliquid": -100.0,
+                "A": -90.0,
+                "B": -80.0,
+                "C": -70.0,
+                "D": -60.0,
+                "E": -50.0,
+                "F": 10.0,
+                "G": 20.0,
+                "H": 30.0,
+                "I": 40.0,
+                "J": 50.0,
+                "K": 60.0,
+            }
+        )
+        composite = pd.DataFrame([scores] * len(dates), index=dates)
+        returns = {h: pd.DataFrame(0.01, index=dates, columns=tokens) for h in [7, 14, 30]}
+        entries = {h: pd.DataFrame(1.0, index=dates, columns=tokens) for h in [7, 14, 30]}
+        exits = {h: pd.DataFrame(1.01, index=dates, columns=tokens) for h in [7, 14, 30]}
+        eligible = pd.DataFrame(True, index=dates, columns=tokens)
+        shortable = pd.DataFrame(True, index=dates, columns=tokens)
+        metadata = pd.DataFrame(
+            {
+                "token": ["HYPE", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"],
+                "name": tokens,
+            },
+            index=tokens,
+        )
+        regime = pd.Series("Bearish", index=dates)
+        btc_returns = {h: pd.Series(0.005, index=dates) for h in [7, 14, 30]}
+        ctx = EvaluationContext(dates, metadata, returns, entries, exits, eligible, eligible, shortable, regime, btc_returns)
+
+        _, constituents = run_portfolio_backtest(ctx, composite, 14, "Train", "always_l_s")
+        hype_rows = constituents[constituents["token"].eq("HYPE")]
+
+        self.assertTrue(hype_rows.empty or (hype_rows["side"] == "Long").all())
+        self.assertFalse(((constituents["token"] == "HYPE") & (constituents["side"] == "Short")).any())
+
 
 if __name__ == "__main__":
     unittest.main()
