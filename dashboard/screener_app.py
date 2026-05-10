@@ -230,10 +230,6 @@ FACTOR_RESEARCH_NAME = "May24toMay26"
 FACTOR_RESEARCH_OUTPUT_DIR = PROJECT_ROOT / "output" / "factor_evaluation"
 FACTOR_RESEARCH_NOTEBOOK_PATH = PROJECT_ROOT / "notebooks" / f"factor_model_walkforward_{FACTOR_RESEARCH_NAME}.ipynb"
 FACTOR_RESEARCH_NOTEBOOK_TITLE = f"{FACTOR_RESEARCH_NAME} Factor Research (WIP)"
-FACTOR_RESEARCH_NOTEBOOK_URL = os.getenv(
-    "FACTOR_RESEARCH_NOTEBOOK_URL",
-    f"https://github.com/asad-h/crypto-factor-app/blob/main/notebooks/factor_model_walkforward_{FACTOR_RESEARCH_NAME}.ipynb",
-)
 FACTOR_RESEARCH_FILES = {
     "plain_english": FACTOR_RESEARCH_OUTPUT_DIR / f"factor_model_walkforward_{FACTOR_RESEARCH_NAME}_plain_english_writeup.md",
     "next_steps": FACTOR_RESEARCH_OUTPUT_DIR / f"next_steps_{FACTOR_RESEARCH_NAME}.md",

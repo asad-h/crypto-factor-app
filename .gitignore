@@ -6,6 +6,16 @@ __pycache__/
 *.py[cod]
 logs/
 .streamlit/secrets.toml
+
+# Local handoffs, prompts, and design scratch files should stay off GitHub.
+DASHBOARD_HANDOFF.md
+FACTOR_MODEL_HANDOFF.md
+SCREENER_PROMPT.md
+screener_visual_mockups.html
+output/factor_evaluation/*handoff*.md
+output/factor_evaluation/*handover*.md
+output/factor_evaluation/*independent_review*.md
+output/factor_evaluation/*audit*.md
 output/*
 !output/
 !output/factor_evaluation/
