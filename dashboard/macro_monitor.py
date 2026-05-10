@@ -42,6 +42,7 @@ SEC_COMPANY_CONCEPT_URL = "https://data.sec.gov/api/xbrl/companyconcept/CIK{cik:
 SEC_ARCHIVES_BASE_URL = "https://www.sec.gov/Archives/edgar/data"
 SEC_REQUEST_TIMEOUT_SECONDS = 30
 SEC_REQUEST_RETRIES = 2
+SEC_MIN_REQUEST_INTERVAL_SECONDS = 0.15
 BITCOIN_COM_CHARTS_BASE_URL = "https://charts.bitcoin.com/api/v1/charts"
 CRYPTO_BENCHMARK_COINGECKO_IDS = {
     "BTCUSDT": "bitcoin",
@@ -59,6 +60,7 @@ SEC_HEADERS = {
     "Accept": "application/json",
     "Accept-Encoding": "gzip, deflate",
 }
+_SEC_LAST_REQUEST_AT = 0.0
 
 FRED_SERIES = [
     ("DGS10", "10-Year Treasury Yield", "%"),
@@ -802,10 +804,15 @@ def load_bitcoin_com_charts() -> dict[str, Any]:
 
 
 def _sec_json(url: str) -> Any:
+    global _SEC_LAST_REQUEST_AT
     last_exc: Exception | None = None
     for attempt in range(SEC_REQUEST_RETRIES + 1):
         try:
+            elapsed = time.monotonic() - _SEC_LAST_REQUEST_AT
+            if elapsed < SEC_MIN_REQUEST_INTERVAL_SECONDS:
+                time.sleep(SEC_MIN_REQUEST_INTERVAL_SECONDS - elapsed)
             resp = requests.get(url, headers=SEC_HEADERS, timeout=SEC_REQUEST_TIMEOUT_SECONDS)
+            _SEC_LAST_REQUEST_AT = time.monotonic()
             resp.raise_for_status()
             return resp.json()
         except requests.RequestException as exc:

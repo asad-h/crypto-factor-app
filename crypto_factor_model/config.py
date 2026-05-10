@@ -39,7 +39,24 @@ COINGECKO_BASE_URL = _get_secret(
 )
 FRED_API_KEY = _get_secret("FRED_API_KEY")
 NANSEN_API_KEY = _get_secret("NANSEN_API_KEY")
-SEC_USER_AGENT = _get_secret("SEC_USER_AGENT", "CryptoTokensScreener/1.0 asad.hussain@users.noreply.github.com")
+
+DEFAULT_SEC_USER_AGENT = "Crypto Tokens Screener asad.hussain.rockawayx@gmail.com"
+
+
+def _valid_sec_user_agent(value: str) -> bool:
+    text = str(value or "").strip().lower()
+    if not text or "@" not in text:
+        return False
+    blocked_contacts = ("noreply", "users.noreply.github.com", "example.com")
+    return not any(marker in text for marker in blocked_contacts)
+
+
+def _sec_user_agent() -> str:
+    value = _get_secret("SEC_USER_AGENT", DEFAULT_SEC_USER_AGENT)
+    return str(value).strip() if _valid_sec_user_agent(value) else DEFAULT_SEC_USER_AGENT
+
+
+SEC_USER_AGENT = _sec_user_agent()
 
 # ── Universe filters ───────────────────────────────────────────────────
 MIN_MCAP_USD = 100_000_000          # $100M
