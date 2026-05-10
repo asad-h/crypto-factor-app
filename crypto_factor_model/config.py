@@ -38,6 +38,7 @@ COINGECKO_BASE_URL = _get_secret(
     "https://pro-api.coingecko.com/api/v3" if COINGECKO_API_KEY else "https://api.coingecko.com/api/v3",
 )
 FRED_API_KEY = _get_secret("FRED_API_KEY")
+NANSEN_API_KEY = _get_secret("NANSEN_API_KEY")
 SEC_USER_AGENT = _get_secret("SEC_USER_AGENT", "CryptoFactorModel/1.0 github-actions@users.noreply.github.com")
 
 # ── Universe filters ───────────────────────────────────────────────────

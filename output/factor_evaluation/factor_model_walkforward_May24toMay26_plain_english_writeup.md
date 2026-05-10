@@ -1,6 +1,6 @@
-# May24toMay26 Crypto Factor Walk-Forward: Plain-English Companion
+# May24toMay26 Crypto Factor Walk-Forward: Research Update
 
-This note explains the notebook in non-technical language. It reflects the broader CoinGecko Pro-backed research dataset, the formal `$10M` liquidity universe, purged rolling folds, and the stricter model-selection gate.
+I am using this note to explain what changed in the latest notebook run, what the stricter validation process says, and what should or should not be treated as production-ready. It reflects the broader CoinGecko Pro-backed research dataset, the formal `$10M` liquidity universe, purged rolling folds, and the stricter model-selection gate.
 
 ## The Short Version
 
@@ -41,8 +41,6 @@ The latest run made four changes:
 
 The latest WIP research adds diagnostics and candidate research signals, but it does not change the production dashboard factors yet.
 
-In plain English:
-
 - The research found three better-behaved fundamentals candidates: `tvl_chg_8w`, `trading_fees_chg_4w`, and `revenue_chg_4w`.
 - These candidates are promising because they look at changes in fundamentals rather than stale absolute levels.
 - They are research-only for now. They are not used in the online factor screener rankings yet.
@@ -70,7 +68,7 @@ The best reporting-only L/S row was:
 |---|---:|---:|---:|---:|
 | Learned global sticky L/S, `$10M` universe | -4.8% | -0.04 | -26.6% | 1 of 4 |
 
-That fails the stricter gate. In plain English: it was the least-bad L/S candidate in the preferred liquidity universe, but it was not actually good enough.
+That fails the stricter gate. I would describe it as the least-bad L/S candidate in the preferred liquidity universe, but not good enough to promote.
 
 ## Untouched Test Result
 

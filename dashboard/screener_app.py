@@ -46,6 +46,7 @@ from dashboard.project_events import (
     HYPERLIQUID_STAKING_DOCS_URL,
     HYPURRSCAN_UNSTAKING_URL,
     NANSEN_ENDPOINTS,
+    build_nansen_token_context_requests,
     compute_rolling_30d_return_correlations,
     fetch_defillama_unlock_events,
     fetch_nansen_token_context,
@@ -53,7 +54,7 @@ from dashboard.project_events import (
     hyperliquid_unstaking_context,
     source_config_for_project,
 )
-from crypto_factor_model.config import FAMILY_WEIGHTS
+from crypto_factor_model.config import FAMILY_WEIGHTS, NANSEN_API_KEY
 
 
 st.set_page_config(
@@ -473,6 +474,11 @@ def inject_css() -> None:
         }
         .footer-credit a { color: var(--muted); text-decoration: none; }
         .footer-credit a:hover { color: var(--text); text-decoration: underline; }
+        div[data-testid="stTabs"] div[role="tablist"] button[role="tab"]:last-child,
+        div[data-testid="stTabs"] div[role="tablist"] button[role="tab"]:last-child p {
+            color: var(--faint) !important;
+            opacity: 0.76;
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -596,6 +602,39 @@ def format_return(value: Any) -> str:
     if pd.isna(value):
         return "n/a"
     return f"{float(value) * 100:+.1f}%"
+
+
+def winsorise_frame_values(
+    frame: pd.DataFrame,
+    value_col: str,
+    *,
+    by: list[str] | None = None,
+    upper_quantile: float = 0.995,
+    lower_quantile: float | None = 0.005,
+) -> pd.DataFrame:
+    if frame.empty or value_col not in frame:
+        return frame
+    out = frame.copy()
+    out[value_col] = pd.to_numeric(out[value_col], errors="coerce")
+
+    if by:
+        grouped = out.groupby(by, observed=True)[value_col]
+        upper = grouped.transform(lambda values: values.dropna().quantile(upper_quantile))
+        lower = (
+            grouped.transform(lambda values: values.dropna().quantile(lower_quantile))
+            if lower_quantile is not None
+            else None
+        )
+        out[value_col] = out[value_col].clip(lower=lower, upper=upper, axis=0)
+        return out
+
+    values = out[value_col].dropna()
+    if values.empty:
+        return out
+    upper = values.quantile(upper_quantile)
+    lower = values.quantile(lower_quantile) if lower_quantile is not None else None
+    out[value_col] = out[value_col].clip(lower=lower, upper=upper)
+    return out
 
 
 def slugify(value: Any) -> str:
@@ -1734,7 +1773,13 @@ def _change_timeseries_frame(df: pd.DataFrame, metric_col: str, group_col: str |
     return grouped
 
 
-def _summary_raw_timeseries_frame(df: pd.DataFrame, metric_col: str, group_col: str | None = None) -> pd.DataFrame:
+def _summary_raw_timeseries_frame(
+    df: pd.DataFrame,
+    metric_col: str,
+    group_col: str | None = None,
+    *,
+    winsorise_metrics: bool = False,
+) -> pd.DataFrame:
     raw_metric, raw_label = SUMMARY_RAW_METRICS[metric_col]
     real = load_cached_project_timeseries("")
     if not real.empty and raw_metric in real:
@@ -1749,6 +1794,8 @@ def _summary_raw_timeseries_frame(df: pd.DataFrame, metric_col: str, group_col: 
             real["Group"] = real["ticker"].map(mapping)
         base = real.dropna(subset=[raw_metric, "Group"]).copy()
         if not base.empty:
+            if winsorise_metrics:
+                base = winsorise_frame_values(base, raw_metric, by=["date"])
             grouped = (
                 base.groupby(["date", "Group"], observed=True)[raw_metric]
                 .agg(Value="sum", **{"Eligible Projects": "count"})
@@ -1770,11 +1817,20 @@ def _summary_raw_timeseries_frame(df: pd.DataFrame, metric_col: str, group_col: 
     return pd.DataFrame(rows)
 
 
-def _summary_index_timeseries_frame(df: pd.DataFrame, metric_col: str, group_col: str | None = None) -> pd.DataFrame:
-    raw = _summary_raw_timeseries_frame(df, metric_col, group_col)
+def _summary_index_timeseries_frame(
+    df: pd.DataFrame,
+    metric_col: str,
+    group_col: str | None = None,
+    *,
+    winsorise_metrics: bool = False,
+) -> pd.DataFrame:
+    raw = _summary_raw_timeseries_frame(df, metric_col, group_col, winsorise_metrics=winsorise_metrics)
     if raw.empty:
         return raw
-    return _rebase_timeseries_to_first(raw, ["Group"])
+    indexed = _rebase_timeseries_to_first(raw, ["Group"])
+    if winsorise_metrics:
+        indexed = winsorise_frame_values(indexed, "Value")
+    return indexed
 
 
 def _rebase_timeseries_to_first(frame: pd.DataFrame, group_cols: list[str]) -> pd.DataFrame:
@@ -1793,7 +1849,13 @@ def _rebase_timeseries_to_first(frame: pd.DataFrame, group_cols: list[str]) -> p
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(columns=frame.columns)
 
 
-def _summary_raw_stat_timeseries_frame(df: pd.DataFrame, metric_col: str, group_col: str | None = None) -> pd.DataFrame:
+def _summary_raw_stat_timeseries_frame(
+    df: pd.DataFrame,
+    metric_col: str,
+    group_col: str | None = None,
+    *,
+    winsorise_metrics: bool = False,
+) -> pd.DataFrame:
     raw_metric, _ = SUMMARY_RAW_METRICS[metric_col]
     real = load_cached_project_timeseries("")
     if real.empty or raw_metric not in real:
@@ -1812,6 +1874,8 @@ def _summary_raw_stat_timeseries_frame(df: pd.DataFrame, metric_col: str, group_
     base = real.dropna(subset=[raw_metric, "Group"]).copy()
     if base.empty:
         return pd.DataFrame(columns=["date", "Group", "Statistic", "Value", "Eligible Projects"])
+    if winsorise_metrics:
+        base = winsorise_frame_values(base, raw_metric, by=["date"])
 
     rows = []
     for (day, group_name), group in base.groupby(["date", "Group"], observed=True):
@@ -1854,14 +1918,25 @@ def _dispersion_frame(df: pd.DataFrame, metric_col: str, group_col: str | None =
     return pd.DataFrame(rows)
 
 
-def _dispersion_timeseries_frame(df: pd.DataFrame, metric_col: str, group_col: str | None = None) -> pd.DataFrame:
-    raw_stats = _summary_raw_stat_timeseries_frame(df, metric_col, group_col)
+def _dispersion_timeseries_frame(
+    df: pd.DataFrame,
+    metric_col: str,
+    group_col: str | None = None,
+    *,
+    winsorise_metrics: bool = False,
+) -> pd.DataFrame:
+    raw_stats = _summary_raw_stat_timeseries_frame(df, metric_col, group_col, winsorise_metrics=winsorise_metrics)
     if not raw_stats.empty:
-        return _rebase_timeseries_to_first(raw_stats, ["Group", "Statistic"])
+        rebased = _rebase_timeseries_to_first(raw_stats, ["Group", "Statistic"])
+        if winsorise_metrics:
+            rebased = winsorise_frame_values(rebased, "Value", by=["Statistic"])
+        return rebased
 
     project_ts = _project_change_timeseries_frame(df, metric_col)
     if project_ts.empty:
         return project_ts
+    if winsorise_metrics:
+        project_ts = winsorise_frame_values(project_ts, "Value", by=["date"])
     if group_col is None:
         project_ts["Group"] = "Aggregate"
     else:
@@ -1883,7 +1958,10 @@ def _dispersion_timeseries_frame(df: pd.DataFrame, metric_col: str, group_col: s
     fallback = pd.DataFrame(rows)
     if fallback.empty:
         return fallback
-    return _rebase_timeseries_to_first(fallback, ["Group", "Statistic"])
+    rebased = _rebase_timeseries_to_first(fallback, ["Group", "Statistic"])
+    if winsorise_metrics:
+        rebased = winsorise_frame_values(rebased, "Value", by=["Statistic"])
+    return rebased
 
 
 def _bar_chart(
@@ -1931,10 +2009,13 @@ def _change_timeseries_chart(
     key: str,
     category_orders: dict[str, list[str]] | None = None,
     raw_values: bool = False,
+    winsorise_metrics: bool = False,
 ) -> None:
     if plot_df.empty:
         st.info("No eligible data for this chart.")
         return
+    if winsorise_metrics:
+        plot_df = winsorise_frame_values(plot_df, "Value")
     max_abs = max(5.0, float(plot_df["Value"].abs().max())) * 1.18 if not raw_values else None
     hover_value = ":$,.0f" if raw_values else ":.2f"
     fig = px.line(
@@ -1970,19 +2051,44 @@ def _change_timeseries_chart(
     st.plotly_chart(fig, width="stretch", key=key)
 
 
-def render_change_summary_charts(df: pd.DataFrame, metric_col: str, raw_values: bool = False) -> None:
+def render_change_summary_charts(
+    df: pd.DataFrame,
+    metric_col: str,
+    raw_values: bool = False,
+    winsorise_metrics: bool = False,
+) -> None:
     st.subheader("30D Change")
-    frame_builder = _summary_raw_timeseries_frame if raw_values else _summary_index_timeseries_frame
     mode_label = "Raw aggregate" if raw_values else "% change"
     specs = [
-        (frame_builder(df, metric_col), f"Aggregate: {CHANGE_METRICS_30D[metric_col]} ({mode_label})", "summary_30d_change_aggregate", None),
-        (frame_builder(df, metric_col, "category"), f"By Category: {CHANGE_METRICS_30D[metric_col]} ({mode_label})", "summary_30d_change_category", None),
+        (
+            _summary_raw_timeseries_frame(df, metric_col, winsorise_metrics=winsorise_metrics)
+            if raw_values
+            else _summary_index_timeseries_frame(df, metric_col, winsorise_metrics=winsorise_metrics),
+            f"Aggregate: {CHANGE_METRICS_30D[metric_col]} ({mode_label})",
+            "summary_30d_change_aggregate",
+            None,
+        ),
+        (
+            _summary_raw_timeseries_frame(df, metric_col, "category", winsorise_metrics=winsorise_metrics)
+            if raw_values
+            else _summary_index_timeseries_frame(df, metric_col, "category", winsorise_metrics=winsorise_metrics),
+            f"By Category: {CHANGE_METRICS_30D[metric_col]} ({mode_label})",
+            "summary_30d_change_category",
+            None,
+        ),
     ]
     for offset in range(0, len(specs), 2):
         cols = st.columns(2)
         for col, (plot_df, title, key, category_orders) in zip(cols, specs[offset : offset + 2]):
             with col:
-                _change_timeseries_chart(plot_df, title=title, key=key, category_orders=category_orders, raw_values=raw_values)
+                _change_timeseries_chart(
+                    plot_df,
+                    title=title,
+                    key=key,
+                    category_orders=category_orders,
+                    raw_values=raw_values,
+                    winsorise_metrics=winsorise_metrics,
+                )
 
 
 def _dispersion_timeseries_chart(
@@ -1991,12 +2097,15 @@ def _dispersion_timeseries_chart(
     key: str,
     category_orders: dict[str, list[str]] | None = None,
     stat_filter: str | None = None,
+    winsorise_metrics: bool = False,
 ) -> None:
     if stat_filter is not None and not plot_df.empty:
         plot_df = plot_df[plot_df["Statistic"] == stat_filter].copy()
     if plot_df.empty:
         st.info("No eligible data for this chart.")
         return
+    if winsorise_metrics:
+        plot_df = winsorise_frame_values(plot_df, "Value")
     max_abs = max(5.0, float(plot_df["Value"].abs().max())) * 1.18
     color_col = "Statistic" if plot_df["Group"].nunique() == 1 and stat_filter is None else "Group"
     fig = px.line(
@@ -2028,11 +2137,11 @@ def _dispersion_timeseries_chart(
     st.plotly_chart(fig, width="stretch", key=key)
 
 
-def render_dispersion_charts(df: pd.DataFrame, metric_col: str) -> None:
+def render_dispersion_charts(df: pd.DataFrame, metric_col: str, winsorise_metrics: bool = False) -> None:
     st.subheader("Dispersion")
     st.caption("Each statistic is indexed to the first visible date, so all series begin at 0%.")
-    aggregate = _dispersion_timeseries_frame(df, metric_col)
-    by_category = _dispersion_timeseries_frame(df, metric_col, "category")
+    aggregate = _dispersion_timeseries_frame(df, metric_col, winsorise_metrics=winsorise_metrics)
+    by_category = _dispersion_timeseries_frame(df, metric_col, "category", winsorise_metrics=winsorise_metrics)
     for stat in DISPERSION_STATS:
         st.markdown(f"**{stat}**")
         stat_key = stat.lower().replace(" ", "_").replace("th_", "th_")
@@ -2050,13 +2159,30 @@ def render_dispersion_charts(df: pd.DataFrame, metric_col: str) -> None:
                         key=key,
                         category_orders=category_orders,
                         stat_filter=stat,
+                        winsorise_metrics=winsorise_metrics,
                     )
 
 
 def render_executive_summary(df: pd.DataFrame) -> None:
+    control_metric, control_axis, control_winsor = st.columns([2.0, 1.0, 1.2])
+    metric_col = control_metric.selectbox(
+        "Metric",
+        options=list(CHANGE_METRICS_30D),
+        index=0,
+        format_func=CHANGE_METRICS_30D.get,
+        key="summary_metric_v2",
+    )
+    raw_values = control_axis.toggle("Raw aggregate values", value=False, key="summary_raw_aggregate_values")
+    winsorise_metrics = control_winsor.toggle(
+        "Winsorise at 99.5%",
+        value=True,
+        key="summary_winsorise_metrics_995",
+        help="Caps charted metric values at the 99.5th percentile to keep extreme one-off observations from dominating the executive-summary charts.",
+    )
+
     kpi_cols = st.columns(4)
-    for col, (metric_col, metric_label) in zip(kpi_cols, CHANGE_METRICS_30D.items()):
-        aggregate_change = _summary_index_timeseries_frame(df, metric_col)
+    for col, (kpi_metric_col, metric_label) in zip(kpi_cols, CHANGE_METRICS_30D.items()):
+        aggregate_change = _summary_index_timeseries_frame(df, kpi_metric_col, winsorise_metrics=winsorise_metrics)
         latest = aggregate_change[aggregate_change["Group"] == "Aggregate"].sort_values("date").tail(1)
         value = latest["Value"].iloc[0] if not latest.empty else float("nan")
         eligible = int(latest["Eligible Projects"].iloc[0]) if not latest.empty else 0
@@ -2066,19 +2192,10 @@ def render_executive_summary(df: pd.DataFrame) -> None:
             delta=f"{eligible} / {len(df)} projects",
         )
 
-    control_metric, control_axis = st.columns([2.4, 1.0])
-    metric_col = control_metric.selectbox(
-        "Metric",
-        options=list(CHANGE_METRICS_30D),
-        index=0,
-        format_func=CHANGE_METRICS_30D.get,
-        key="summary_metric_v2",
-    )
-    raw_values = control_axis.toggle("Raw aggregate values", value=False, key="summary_raw_aggregate_values")
     fdv_bucket_markdown()
 
-    render_change_summary_charts(df, metric_col, raw_values=raw_values)
-    render_dispersion_charts(df, metric_col)
+    render_change_summary_charts(df, metric_col, raw_values=raw_values, winsorise_metrics=winsorise_metrics)
+    render_dispersion_charts(df, metric_col, winsorise_metrics=winsorise_metrics)
 
 
 def filter_projects(df: pd.DataFrame) -> pd.DataFrame:
@@ -2130,7 +2247,7 @@ def filter_projects(df: pd.DataFrame) -> pd.DataFrame:
 
 def render_screener(df: pd.DataFrame) -> pd.DataFrame:
     st.markdown(
-        '<div class="hero-card"><h3>Screener</h3>'
+        '<div class="hero-card"><h3>Tokens Screener</h3>'
         '<p>One row per project. Change filters, inspect project-level metrics, then use the distribution explorer below.</p></div>',
         unsafe_allow_html=True,
     )
@@ -2756,17 +2873,25 @@ def render_project_nansen_context(row: pd.Series) -> None:
             }
         ]
         st.dataframe(pd.DataFrame(endpoint_rows), hide_index=True, width="stretch")
-        if not os.getenv("NANSEN_API_KEY"):
-            st.info("Set `NANSEN_API_KEY` to enable live Nansen enrichment. The dashboard will continue without it.")
+        if not NANSEN_API_KEY:
+            st.info("Set `NANSEN_API_KEY` in Streamlit secrets to enable live Nansen enrichment. The dashboard will continue without it.")
             return
         if not chain or not token_address:
             st.info(
-                f"Set `NANSEN_{str(row['ticker']).upper()}_TOKEN_ADDRESS` to enable token-specific Nansen calls for this project."
+                f"No supported Nansen token address is mapped yet for {str(row['ticker']).upper()}."
             )
             return
-        if st.button("Fetch Nansen context", key=f"fetch_nansen_context_{row['ticker']}"):
+        request_count = len(build_nansen_token_context_requests(chain, token_address))
+        masked_address = f"{token_address[:8]}...{token_address[-6:]}" if len(token_address) > 16 else token_address
+        st.caption(f"Mapped Nansen asset: {chain} / {masked_address}. Full enrichment queries {request_count} endpoint slices.")
+        if st.button("Fetch full Nansen enrichment", key=f"fetch_nansen_context_{row['ticker']}"):
             with st.spinner("Fetching Nansen context..."):
-                context = fetch_nansen_token_context(chain, token_address)
+                context = fetch_nansen_token_context(
+                    chain,
+                    token_address,
+                    api_key=NANSEN_API_KEY,
+                    max_requests=max(request_count, 1),
+                )
             if context.empty:
                 st.info("Nansen returned no context for this token.")
             else:
@@ -3172,14 +3297,10 @@ def render_factor_research_wip() -> None:
     weight_validation = _weight_experiment_validation_table(research)
 
     st.markdown(
-        '<div class="hero-card"><h3>May24toMay26 Factor Research (WIP)</h3>'
+        '<div class="hero-card"><h3>Factor Research (WIP)</h3>'
         '<p>Research notebook and audit-facing diagnostics. Production factor rankings are unchanged.</p></div>',
         unsafe_allow_html=True,
     )
-    st.markdown(
-        f"[{FACTOR_RESEARCH_NOTEBOOK_TITLE}]({FACTOR_RESEARCH_NOTEBOOK_URL})",
-    )
-    st.caption("Opens the executed research notebook in the repository. Use the download button if the hosted notebook link is unavailable.")
     if FACTOR_RESEARCH_NOTEBOOK_PATH.exists():
         st.download_button(
             "Download notebook",
@@ -3189,7 +3310,7 @@ def render_factor_research_wip() -> None:
         )
 
     st.info(
-        "Plain English: the latest research improved the audit trail and found better candidate fundamentals signals, "
+        "The latest research improved the audit trail and found better candidate fundamentals signals, "
         "but it did not approve a new production factor model. The dashboard factors shown elsewhere still use the existing production inputs."
     )
 
@@ -3211,8 +3332,8 @@ def render_factor_research_wip() -> None:
     c4.metric("Regime sub-gate", "Pass" if bool(regime_pass) else "Fail")
     c5.metric("Test beta share", "n/a" if pd.isna(beta_share) else f"{beta_share:.1%}")
 
-    with st.expander("Plain-English companion", expanded=True):
-        text = research.get("plain_english") or research.get("next_steps") or "Plain-English note is unavailable in this deployment."
+    with st.expander("Research update", expanded=True):
+        text = research.get("plain_english") or research.get("next_steps") or "Research update is unavailable in this deployment."
         st.markdown(text)
 
     with st.expander("Stable fundamentals candidates", expanded=True):
@@ -3321,11 +3442,20 @@ def render_factors(df: pd.DataFrame) -> None:
         '<p>Factor leaders and laggards by total score and by family.</p></div>',
         unsafe_allow_html=True,
     )
+    render_factor_screener_section(df)
+
+
+def render_factor_screener_section(df: pd.DataFrame) -> None:
+    st.divider()
+    st.subheader("Factor Screener")
+    if df.empty or "factor_score" not in df:
+        st.info("No tokens match the current screener filters.")
+        return
     render_factor_aggregation_info()
-    with st.expander("Filters", expanded=True):
+    with st.expander("Factor Filters", expanded=True):
         c1, c2 = st.columns(2)
-        use_score_filter = c1.toggle("Filter by factor score", value=False)
-        use_fdv_filter = c2.toggle("Filter by FDV bucket", value=False)
+        use_score_filter = c1.toggle("Filter by factor score", value=False, key="merged_factor_score_filter_toggle")
+        use_fdv_filter = c2.toggle("Filter by FDV bucket", value=False, key="merged_factor_fdv_filter_toggle")
         filtered = df.copy()
         if use_score_filter:
             min_score = float(df["factor_score"].min())
@@ -3339,6 +3469,7 @@ def render_factors(df: pd.DataFrame) -> None:
                     max_value=max_score,
                     value=(min_score, max_score),
                     step=0.05,
+                    key="merged_factor_score_range",
                 )
             filtered = filtered[filtered["factor_score"].between(score_range[0], score_range[1])]
         if use_fdv_filter:
@@ -3346,14 +3477,14 @@ def render_factors(df: pd.DataFrame) -> None:
                 "FDV buckets",
                 FDV_BUCKET_ORDER,
                 default=FDV_BUCKET_ORDER,
-                key="factor_fdv_bucket_filter",
+                key="merged_factor_fdv_bucket_filter",
             )
             filtered = filtered[filtered["fdv_bucket"].astype(str).isin(selected_buckets)]
 
     _render_factor_tables(filtered, "Top 5 Tokens", ascending=False)
     _render_factor_tables(filtered, "Bottom 5 Tokens", ascending=True)
-    render_screener_table(filtered)
     render_factor_index(filtered)
+    render_screener_table(filtered)
 
 
 def render_data_quality(df: pd.DataFrame) -> None:
@@ -3545,17 +3676,16 @@ def main() -> None:
     df = load_projects()
 
     page_header()
-    summary_tab, screener_tab, project_tab, factors_tab, research_tab, signal_tab, market_tab, quality_tab, dictionary_tab = st.tabs(
+    summary_tab, screener_tab, project_tab, signal_tab, market_tab, quality_tab, dictionary_tab, research_tab = st.tabs(
         [
             "Executive Summary",
-            "Screener",
+            "Tokens Screener",
             "Project Detail",
-            "Factor Screener",
-            "Factor Research WIP",
             "Signal Detail",
             "Macro Signals",
             "Data Quality",
             "Data Dictionary",
+            "Factor Research (WIP)",
         ]
     )
 
@@ -3565,15 +3695,10 @@ def main() -> None:
     with screener_tab:
         filtered = render_screener(df)
         render_distribution_explorer(filtered)
+        render_factor_screener_section(filtered)
 
     with project_tab:
         render_project_detail(df)
-
-    with factors_tab:
-        render_factors(df)
-
-    with research_tab:
-        render_factor_research_wip()
 
     with signal_tab:
         render_signal_detail(df)
@@ -3586,6 +3711,9 @@ def main() -> None:
 
     with dictionary_tab:
         render_data_dictionary()
+
+    with research_tab:
+        render_factor_research_wip()
 
     render_footer_credit()
 

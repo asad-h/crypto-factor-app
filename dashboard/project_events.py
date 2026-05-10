@@ -7,6 +7,7 @@ import os
 import re
 import time
 from datetime import datetime, timedelta, timezone
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 from urllib.parse import quote
@@ -14,7 +15,8 @@ from urllib.parse import quote
 import pandas as pd
 import requests
 
-from dashboard.screener_data import SCREENER_CACHE_DIR
+from crypto_factor_model.config import NANSEN_API_KEY, _get_secret
+from dashboard.screener_data import CG_COINS_PATH, SCREENER_CACHE_DIR
 
 
 PROJECT_EVENTS_PATH = SCREENER_CACHE_DIR / "project_events.parquet"
@@ -78,6 +80,28 @@ SUPPORTED_NANSEN_CHAINS = {
     "hyperevm",
     "hyperliquid",
 }
+
+COINGECKO_NANSEN_CHAIN_MAP = {
+    "ethereum": "ethereum",
+    "solana": "solana",
+    "base": "base",
+    "arbitrum-one": "arbitrum",
+    "arbitrum": "arbitrum",
+    "binance-smart-chain": "bnb",
+    "bnb": "bnb",
+    "hyperevm": "hyperevm",
+    "hyperliquid": "hyperliquid",
+}
+
+NANSEN_PLATFORM_PRIORITY = (
+    "ethereum",
+    "base",
+    "arbitrum-one",
+    "solana",
+    "binance-smart-chain",
+    "hyperevm",
+    "hyperliquid",
+)
 
 DEFAULT_PROTOCOL_SOURCES: dict[str, dict[str, Any]] = {
     "hyperliquid": {
@@ -170,10 +194,15 @@ def source_config_for_project(row: pd.Series | dict[str, Any]) -> dict[str, Any]
         config["unlock_url"] = f"{DEFILLAMA_UNLOCK_BASE_URL}/{slug}" if slug else ""
         config["governance_url"] = f"{DEFILLAMA_GOVERNANCE_BASE_URL}/{slug}" if slug else ""
 
-    address = os.getenv(f"NANSEN_{ticker}_TOKEN_ADDRESS") or os.getenv(f"NANSEN_{slug.upper().replace('-', '_')}_TOKEN_ADDRESS")
+    secret_slug = slug.upper().replace("-", "_")
+    address = _get_secret(f"NANSEN_{ticker}_TOKEN_ADDRESS") or _get_secret(f"NANSEN_{secret_slug}_TOKEN_ADDRESS")
     if address:
         config["nansen_token_address"] = address
     config.setdefault("nansen_chain", _infer_nansen_chain(row))
+    if not config.get("nansen_token_address"):
+        inferred = _coingecko_nansen_address(_first_present(row, ["coingecko_id"]), config.get("nansen_chain"))
+        if inferred:
+            config["nansen_chain"], config["nansen_token_address"] = inferred
     return config
 
 
@@ -528,7 +557,7 @@ def fetch_nansen_token_context(
     date_range: dict[str, str] | None = None,
     max_requests: int = 8,
 ) -> pd.DataFrame:
-    key = api_key or os.getenv("NANSEN_API_KEY")
+    key = api_key or NANSEN_API_KEY or os.getenv("NANSEN_API_KEY")
     if not key:
         return pd.DataFrame(columns=["Endpoint", "Status", "Items", "Summary"])
     request_specs = build_nansen_token_context_requests(chain, token_address, date_range=date_range)[:max_requests]
@@ -639,6 +668,49 @@ def _first_present(row: pd.Series | dict[str, Any], keys: list[str]) -> Any:
             value = None
         if value is not None and not pd.isna(value) and str(value).strip() not in {"", "nan", "None"}:
             return value
+    return None
+
+
+@lru_cache(maxsize=1)
+def _coingecko_platforms_by_id() -> dict[str, dict[str, str]]:
+    if not CG_COINS_PATH.exists():
+        return {}
+    try:
+        data = json.loads(CG_COINS_PATH.read_text())
+    except Exception:
+        return {}
+    out: dict[str, dict[str, str]] = {}
+    for coin in data:
+        coin_id = str(coin.get("id") or "").strip()
+        platforms = coin.get("platforms") if isinstance(coin, dict) else None
+        if coin_id and isinstance(platforms, dict):
+            out[coin_id] = {str(k): str(v) for k, v in platforms.items() if v}
+    return out
+
+
+def _coingecko_nansen_address(coin_id: Any, preferred_chain: Any = None) -> tuple[str, str] | None:
+    platforms = _coingecko_platforms_by_id().get(str(coin_id or "").strip(), {})
+    if not platforms:
+        return None
+    preferred = str(preferred_chain or "").lower().strip()
+    ordered_platforms = list(NANSEN_PLATFORM_PRIORITY)
+    if preferred:
+        preferred_platforms = [
+            platform
+            for platform, nansen_chain in COINGECKO_NANSEN_CHAIN_MAP.items()
+            if nansen_chain == preferred and platform in platforms
+        ]
+        ordered_platforms = [*preferred_platforms, *ordered_platforms]
+
+    seen: set[str] = set()
+    for platform in ordered_platforms:
+        if platform in seen:
+            continue
+        seen.add(platform)
+        address = platforms.get(platform)
+        nansen_chain = COINGECKO_NANSEN_CHAIN_MAP.get(platform)
+        if address and nansen_chain in SUPPORTED_NANSEN_CHAINS:
+            return nansen_chain, address
     return None
 
 
