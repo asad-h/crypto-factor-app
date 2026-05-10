@@ -19,7 +19,7 @@ import plotly.graph_objects as go
 import requests
 import streamlit as st
 
-from crypto_factor_model.config import COINGECKO_API_KEY, COINGECKO_BASE_URL, FRED_API_KEY, SEC_USER_AGENT
+from crypto_factor_model.config import COINGECKO_API_KEY, COINGECKO_BASE_URL, FRED_API_KEY, SEC_USER_AGENT, _get_secret
 
 try:
     import yfinance as yf
@@ -77,6 +77,14 @@ BENCHMARK_ASSETS = [
 ]
 
 CRYPTO_EQUITIES = ["MSTR", "STRC", "BMNR", "COIN", "HOOD", "CRCL"]
+CRYPTO_EQUITY_ISSUERS = {
+    "MSTR": {"cik": 1_050_446, "name": "Strategy Inc.", "exchange": "NASDAQ", "fiscal_year_end": "1231"},
+    "STRC": {"cik": 1_050_446, "name": "Strategy Inc.", "exchange": "NASDAQ", "fiscal_year_end": "1231"},
+    "BMNR": {"cik": 1_829_311, "name": "BitMine Immersion Technologies, Inc.", "exchange": "NYSE", "fiscal_year_end": "0831"},
+    "COIN": {"cik": 1_679_788, "name": "Coinbase Global, Inc.", "exchange": "NASDAQ", "fiscal_year_end": "1231"},
+    "HOOD": {"cik": 1_783_879, "name": "Robinhood Markets, Inc.", "exchange": "NASDAQ", "fiscal_year_end": "1231"},
+    "CRCL": {"cik": 1_876_042, "name": "Circle Internet Group, Inc.", "exchange": "NYSE", "fiscal_year_end": "1231"},
+}
 CRYPTO_EQUITY_LOGOS = {
     "MSTR": "https://logo.clearbit.com/strategy.com",
     "STRC": "https://logo.clearbit.com/strategy.com",
@@ -242,7 +250,7 @@ CHAIN_NAME_OVERRIDES = {
 
 def _fred_api_key() -> str:
     """Return the FRED key supplied through env vars or Streamlit secrets."""
-    return FRED_API_KEY
+    return _get_secret("FRED_API_KEY") or FRED_API_KEY
 
 
 def _parse_value(value: Any) -> float:
@@ -344,11 +352,12 @@ def _fred_latest_observation(
 ) -> dict[str, Any]:
     params: dict[str, Any] = {
         "series_id": series_id,
-        "api_key": api_key,
         "sort_order": "desc",
         "limit": 1,
         "file_type": "json",
     }
+    if api_key:
+        params["api_key"] = api_key
     if observation_end:
         params["observation_end"] = observation_end
 
@@ -1052,16 +1061,29 @@ def _expected_sec_event(submissions: dict[str, Any], recent: pd.DataFrame, ticke
 
 @st.cache_data(ttl=86400, show_spinner=False)
 def load_sec_equity_events() -> dict[str, Any]:
-    mapping_payload = _sec_json(SEC_COMPANY_TICKERS_URL)
-    fields = mapping_payload.get("fields", [])
-    rows = [dict(zip(fields, row)) for row in mapping_payload.get("data", [])]
-    by_ticker = {str(row.get("ticker", "")).upper(): row for row in rows}
+    errors: list[str] = []
+    by_ticker: dict[str, dict[str, Any]] = {
+        ticker: {
+            "ticker": ticker,
+            "cik": spec["cik"],
+            "name": spec["name"],
+            "exchange": spec["exchange"],
+        }
+        for ticker, spec in CRYPTO_EQUITY_ISSUERS.items()
+    }
+    try:
+        mapping_payload = _sec_json(SEC_COMPANY_TICKERS_URL)
+        fields = mapping_payload.get("fields", [])
+        rows = [dict(zip(fields, row)) for row in mapping_payload.get("data", [])]
+        live_by_ticker = {str(row.get("ticker", "")).upper(): row for row in rows}
+        by_ticker.update({ticker: live_by_ticker[ticker] for ticker in CRYPTO_EQUITIES if ticker in live_by_ticker})
+    except Exception as exc:
+        errors.append(f"SEC ticker mapping unavailable, using built-in CIK map: {exc}")
 
     recent_frames: list[pd.DataFrame] = []
     upcoming_rows: list[dict[str, Any]] = []
     issuer_rows: list[dict[str, Any]] = []
     cik_groups: dict[int, dict[str, Any]] = {}
-    errors: list[str] = []
 
     for ticker in CRYPTO_EQUITIES:
         sec_row = by_ticker.get(ticker)
@@ -2190,7 +2212,11 @@ def _render_sec_equity_events(sec_events: dict[str, Any] | None = None) -> None:
 
     upcoming = sec_events.get("upcoming", pd.DataFrame())
     recent = sec_events.get("recent", pd.DataFrame())
+    issuers = sec_events.get("issuers", pd.DataFrame())
     _sec_event_summary_metrics(upcoming, recent)
+    if isinstance(issuers, pd.DataFrame) and not issuers.empty:
+        with st.expander("Tracked SEC issuers", expanded=False):
+            st.dataframe(issuers, hide_index=True, width="stretch")
     c1, c2 = st.columns([1, 1])
     with c1:
         st.markdown("**Expected periodic filings**")
@@ -2308,6 +2334,40 @@ def _render_cycle_indicators(cycle: pd.DataFrame | None = None) -> None:
     st.dataframe(cycle, hide_index=True, width="stretch")
 
 
+def _sec_events_missing(sec_events: Any) -> bool:
+    if not isinstance(sec_events, dict) or not sec_events:
+        return True
+    for key in ["issuers", "upcoming", "recent"]:
+        value = sec_events.get(key)
+        if isinstance(value, pd.DataFrame) and not value.empty:
+            return False
+    return True
+
+
+def _live_macro_if_needed(data: Any, errors: list[str]) -> tuple[pd.DataFrame, list[str]]:
+    if isinstance(data, pd.DataFrame) and not data.empty:
+        return data, errors
+    try:
+        live_data, _refreshed_at, live_errors = load_macro_monitor()
+        if not live_data.empty:
+            return live_data, live_errors
+        return pd.DataFrame(), live_errors or errors
+    except Exception as exc:
+        return pd.DataFrame(), [*errors, f"Live FRED refresh failed: {exc}"]
+
+
+def _live_sec_events_if_needed(sec_events: Any) -> dict[str, Any]:
+    if not _sec_events_missing(sec_events):
+        return sec_events
+    try:
+        live_events = load_sec_equity_events()
+        if not _sec_events_missing(live_events):
+            return live_events
+    except Exception:
+        pass
+    return sec_events if isinstance(sec_events, dict) else {}
+
+
 def render_macro_monitor() -> None:
     """Render the Macro Signals tab."""
     header, reload_col, rebuild_col = st.columns([4, 1, 1])
@@ -2344,18 +2404,24 @@ def render_macro_monitor() -> None:
         f"({snapshot_age:.1f}h old). Scheduled refresh: daily at 09:00 GMT."
     )
     if snapshot_age is not None and snapshot_age > MARKET_UPDATE_MAX_AGE_HOURS:
-        st.error(
+        st.warning(
             f"Macro Signals snapshot is stale ({snapshot_age:.1f}h old). "
-            "Rebuild the snapshot before relying on this tab."
+            "Live FRED/SEC sections will refresh when possible; use Rebuild now to refresh the full snapshot."
         )
-        return
-
-    for error in snapshot.get("errors", []):
-        st.warning(error)
 
     macro = snapshot.get("macro", {})
     data = macro.get("data", pd.DataFrame())
-    for error in macro.get("errors", []):
+    macro_errors = list(macro.get("errors", []))
+    data, macro_errors = _live_macro_if_needed(data, macro_errors)
+    for error in macro_errors:
+        st.warning(error)
+
+    sec_events = _live_sec_events_if_needed(snapshot.get("sec_equity_events", {}))
+    for error in snapshot.get("errors", []):
+        if str(error).startswith("Macro:") and not data.empty:
+            continue
+        if str(error).startswith("Sec Equity Events:") and not _sec_events_missing(sec_events):
+            continue
         st.warning(error)
 
     market_structure = snapshot.get("market_structure", {})
@@ -2375,7 +2441,7 @@ def render_macro_monitor() -> None:
     _render_sector_performance(snapshot.get("sector_performance", pd.DataFrame()))
     _render_token_movers(snapshot.get("token_movers", {}))
     _render_crypto_equities(snapshot.get("crypto_equities", pd.DataFrame()))
-    _render_sec_equity_events(snapshot.get("sec_equity_events", {}))
+    _render_sec_equity_events(sec_events)
     _render_cycle_indicators(snapshot.get("cycle_indicators", pd.DataFrame()))
     _render_bitcoin_com_charts(snapshot.get("bitcoin_com_charts", {}))
     _render_defillama_flow_charts(

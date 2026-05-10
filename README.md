@@ -1,4 +1,4 @@
-# Crypto Factor Screener
+# Crypto Tokens Screener
 
 Streamlit dashboard for crypto factor rankings, project-level metrics, market updates, and data quality checks.
 

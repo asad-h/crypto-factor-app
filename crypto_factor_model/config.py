@@ -39,7 +39,7 @@ COINGECKO_BASE_URL = _get_secret(
 )
 FRED_API_KEY = _get_secret("FRED_API_KEY")
 NANSEN_API_KEY = _get_secret("NANSEN_API_KEY")
-SEC_USER_AGENT = _get_secret("SEC_USER_AGENT", "CryptoFactorModel/1.0 github-actions@users.noreply.github.com")
+SEC_USER_AGENT = _get_secret("SEC_USER_AGENT", "CryptoTokensScreener/1.0 asad.hussain@users.noreply.github.com")
 
 # ── Universe filters ───────────────────────────────────────────────────
 MIN_MCAP_USD = 100_000_000          # $100M

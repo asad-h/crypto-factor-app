@@ -5,6 +5,7 @@
 __pycache__/
 *.py[cod]
 logs/
+.streamlit/secrets.toml
 output/*
 !output/
 !output/factor_evaluation/

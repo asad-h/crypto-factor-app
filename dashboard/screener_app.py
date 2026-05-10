@@ -58,7 +58,7 @@ from crypto_factor_model.config import FAMILY_WEIGHTS, NANSEN_API_KEY
 
 
 st.set_page_config(
-    page_title="Crypto Factor Screener",
+    page_title="Crypto Tokens Screener",
     page_icon="",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -125,6 +125,8 @@ STABLECOIN_CATEGORIES = {
     "stablecoin",
     "stablecoins",
 }
+
+EXECUTIVE_SUMMARY_EXCLUDED_CATEGORIES = {"DOR"}
 
 SUMMARY_RAW_METRICS = {
     "revenue_mom_pct": ("revenue_30d", "Revenue 30D"),
@@ -609,8 +611,8 @@ def winsorise_frame_values(
     value_col: str,
     *,
     by: list[str] | None = None,
-    upper_quantile: float = 0.995,
-    lower_quantile: float | None = 0.005,
+    upper_quantile: float = 0.99,
+    lower_quantile: float | None = 0.01,
 ) -> pd.DataFrame:
     if frame.empty or value_col not in frame:
         return frame
@@ -1287,7 +1289,7 @@ def render_footer_credit() -> None:
 
 
 def page_header() -> None:
-    st.title("Crypto Factor Screener")
+    st.title("Crypto Tokens Screener")
 
 
 def metric_value(df: pd.DataFrame, mask: pd.Series, denominator: int) -> tuple[str, str]:
@@ -2164,6 +2166,10 @@ def render_dispersion_charts(df: pd.DataFrame, metric_col: str, winsorise_metric
 
 
 def render_executive_summary(df: pd.DataFrame) -> None:
+    summary_df = df.copy()
+    if "category" in summary_df:
+        summary_df = summary_df[~summary_df["category"].astype(str).isin(EXECUTIVE_SUMMARY_EXCLUDED_CATEGORIES)].copy()
+
     control_metric, control_axis, control_winsor = st.columns([2.0, 1.0, 1.2])
     metric_col = control_metric.selectbox(
         "Metric",
@@ -2174,28 +2180,31 @@ def render_executive_summary(df: pd.DataFrame) -> None:
     )
     raw_values = control_axis.toggle("Raw aggregate values", value=False, key="summary_raw_aggregate_values")
     winsorise_metrics = control_winsor.toggle(
-        "Winsorise at 99.5%",
+        "Winsorise at 99%",
         value=True,
-        key="summary_winsorise_metrics_995",
-        help="Caps charted metric values at the 99.5th percentile to keep extreme one-off observations from dominating the executive-summary charts.",
+        key="summary_winsorise_metrics_99",
+        help="Caps charted metric values at the 1st and 99th percentiles to keep extreme one-off observations from dominating the executive-summary charts.",
     )
+    if len(summary_df) != len(df):
+        excluded = ", ".join(sorted(EXECUTIVE_SUMMARY_EXCLUDED_CATEGORIES))
+        st.caption(f"Executive Summary excludes {excluded} from these aggregate/category charts because the category is a single-project outlier.")
 
     kpi_cols = st.columns(4)
     for col, (kpi_metric_col, metric_label) in zip(kpi_cols, CHANGE_METRICS_30D.items()):
-        aggregate_change = _summary_index_timeseries_frame(df, kpi_metric_col, winsorise_metrics=winsorise_metrics)
+        aggregate_change = _summary_index_timeseries_frame(summary_df, kpi_metric_col, winsorise_metrics=winsorise_metrics)
         latest = aggregate_change[aggregate_change["Group"] == "Aggregate"].sort_values("date").tail(1)
         value = latest["Value"].iloc[0] if not latest.empty else float("nan")
         eligible = int(latest["Eligible Projects"].iloc[0]) if not latest.empty else 0
         col.metric(
             f"{metric_label} 30D Change",
             "n/a" if pd.isna(value) else f"{value:+.1f}%",
-            delta=f"{eligible} / {len(df)} projects",
+            delta=f"{eligible} / {len(summary_df)} projects",
         )
 
     fdv_bucket_markdown()
 
-    render_change_summary_charts(df, metric_col, raw_values=raw_values, winsorise_metrics=winsorise_metrics)
-    render_dispersion_charts(df, metric_col, winsorise_metrics=winsorise_metrics)
+    render_change_summary_charts(summary_df, metric_col, raw_values=raw_values, winsorise_metrics=winsorise_metrics)
+    render_dispersion_charts(summary_df, metric_col, winsorise_metrics=winsorise_metrics)
 
 
 def filter_projects(df: pd.DataFrame) -> pd.DataFrame:
