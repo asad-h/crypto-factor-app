@@ -291,12 +291,12 @@ FILTERED_UNIVERSE_METRICS = {
 }
 
 PEER_KPI_METRICS = {
-    "revenue_30d": "Revenue",
-    "fees_30d": "Fees",
+    "revenue_30d": "Revenue 30D",
+    "fees_30d": "Fees 30D",
     "tvl": "TVL",
     "deposits": "Deposits",
     "open_interest": "Open interest",
-    "volume_24h": "Volume",
+    "volume_24h": "Volume 24H",
     "price": "Price",
 }
 
@@ -476,10 +476,18 @@ def inject_css() -> None:
         }
         .footer-credit a { color: var(--muted); text-decoration: none; }
         .footer-credit a:hover { color: var(--text); text-decoration: underline; }
+        div[data-testid="stTabs"] div[role="tablist"] button[role="tab"]:last-child {
+            background: rgba(112, 120, 102, 0.08) !important;
+            border-color: rgba(112, 120, 102, 0.22) !important;
+            filter: grayscale(1);
+            opacity: 0.42;
+        }
         div[data-testid="stTabs"] div[role="tablist"] button[role="tab"]:last-child,
         div[data-testid="stTabs"] div[role="tablist"] button[role="tab"]:last-child p {
             color: var(--faint) !important;
-            opacity: 0.76;
+        }
+        div[data-testid="stTabs"] div[role="tablist"] button[role="tab"]:last-child[aria-selected="true"] {
+            opacity: 0.58;
         }
         </style>
         """,
@@ -843,6 +851,36 @@ def load_cached_factor_scores() -> pd.DataFrame:
 
 def load_cached_full_project_timeseries() -> pd.DataFrame:
     return _load_cached_full_project_timeseries(screener_cache_signature())
+
+
+def latest_screener_data_date(df: pd.DataFrame) -> pd.Timestamp | None:
+    dates: list[pd.Timestamp] = []
+    if isinstance(df, pd.DataFrame) and "date" in df:
+        snapshot_dates = pd.to_datetime(df["date"], errors="coerce").dropna()
+        if not snapshot_dates.empty:
+            dates.append(snapshot_dates.max())
+    ts = load_cached_full_project_timeseries()
+    if isinstance(ts, pd.DataFrame) and "date" in ts and not ts.empty:
+        ts_dates = pd.to_datetime(ts["date"], errors="coerce").dropna()
+        if not ts_dates.empty:
+            dates.append(ts_dates.max())
+    if not dates:
+        return None
+    return max(dates)
+
+
+def render_screener_freshness(df: pd.DataFrame) -> None:
+    latest = latest_screener_data_date(df)
+    if latest is None or pd.isna(latest):
+        return
+    latest = pd.Timestamp(latest).tz_localize(None).normalize()
+    today = pd.Timestamp.now(tz="UTC").tz_localize(None).normalize()
+    age_days = max(0, int((today - latest).days))
+    st.caption(f"Screener data through {latest.date()} ({age_days}d old).")
+    if age_days > 2:
+        st.warning(
+            "Screener cache is older than expected. The daily refresh should update all source caches and commit the latest snapshot."
+        )
 
 
 @st.cache_data(show_spinner=False)
@@ -1601,7 +1639,11 @@ def build_peer_kpi_growth_frame(df: pd.DataFrame, tickers: list[str], metric: st
 
 
 def render_peer_kpi_growth(df: pd.DataFrame) -> None:
-    st.subheader("Peer KPI Growth")
+    st.subheader("Peer KPI Indexed Levels")
+    st.caption(
+        "Indexed from the first common date using raw cached KPI levels. "
+        "Revenue and fees use trailing 30D totals, not the snapshot percentage-change columns."
+    )
     if df.empty:
         st.info("No projects are available after the current filters.")
         return
@@ -1644,11 +1686,11 @@ def render_peer_kpi_growth(df: pd.DataFrame) -> None:
     )
     fig.update_traces(line=dict(width=2.3))
     fig.update_layout(
-        title=f"{PEER_KPI_METRICS[metric]} Indexed Peer Growth",
+        title=f"{PEER_KPI_METRICS[metric]} Indexed Level",
         template="plotly_dark",
         height=420,
         xaxis_title=None,
-        yaxis_title="Indexed to 100",
+        yaxis_title="Raw KPI indexed to 100",
         margin=dict(l=10, r=20, t=42, b=20),
         paper_bgcolor="#121410",
         plot_bgcolor="#121410",
@@ -1657,6 +1699,9 @@ def render_peer_kpi_growth(df: pd.DataFrame) -> None:
     )
     add_indexed_100_bands(fig, plot_df["Indexed"])
     st.plotly_chart(fig, width="stretch", key=f"peer_kpi_growth_{metric}_{'_'.join(selected_tickers)}")
+    last_date = pd.to_datetime(plot_df["date"], errors="coerce").dropna().max()
+    if pd.notna(last_date):
+        st.caption(f"Last plotted date: {pd.Timestamp(last_date).date()}")
 
 
 def render_wow_distribution_by_category(df: pd.DataFrame) -> None:
@@ -2260,6 +2305,7 @@ def render_screener(df: pd.DataFrame) -> pd.DataFrame:
         '<p>One row per project. Change filters, inspect project-level metrics, then use the distribution explorer below.</p></div>',
         unsafe_allow_html=True,
     )
+    render_screener_freshness(df)
     filtered = filter_projects(df)
     render_filtered_universe_evolution(filtered, "30D Filtered Universe Evolution", "screener_filtered_universe")
     render_peer_kpi_growth(filtered)

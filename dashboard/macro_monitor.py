@@ -43,6 +43,10 @@ SEC_ARCHIVES_BASE_URL = "https://www.sec.gov/Archives/edgar/data"
 SEC_REQUEST_TIMEOUT_SECONDS = 30
 SEC_REQUEST_RETRIES = 2
 BITCOIN_COM_CHARTS_BASE_URL = "https://charts.bitcoin.com/api/v1/charts"
+CRYPTO_BENCHMARK_COINGECKO_IDS = {
+    "BTCUSDT": "bitcoin",
+    "ETHUSDT": "ethereum",
+}
 
 REQUEST_HEADERS = {
     "User-Agent": "CryptoFactorModel/1.0 (+local dashboard)",
@@ -420,6 +424,48 @@ def _fetch_binance_ohlcv(symbol: str, start: str) -> pd.DataFrame:
         return pd.DataFrame()
 
 
+def _coingecko_days_from_start(start: str) -> int:
+    start_ts = pd.Timestamp(start)
+    today = pd.Timestamp.now(tz="UTC").tz_localize(None).normalize()
+    days = int((today - start_ts.normalize()).days) + 7
+    return max(30, min(days, 3650))
+
+
+def _fetch_coingecko_crypto_ohlcv(symbol: str, start: str) -> pd.DataFrame:
+    coin_id = CRYPTO_BENCHMARK_COINGECKO_IDS.get(symbol.upper())
+    if not coin_id:
+        return pd.DataFrame()
+    try:
+        from dashboard.screener_data import CoinGeckoClient
+
+        days = _coingecko_days_from_start(start)
+        chart = CoinGeckoClient().get_market_chart(coin_id, days=days, use_cache=False)
+        if chart.empty or "price" not in chart:
+            return pd.DataFrame()
+        out = pd.DataFrame(index=pd.to_datetime(chart.index, errors="coerce"))
+        out["Close"] = pd.to_numeric(chart["price"], errors="coerce")
+        if "volume_24h" in chart:
+            out["Volume"] = pd.to_numeric(chart["volume_24h"], errors="coerce")
+        else:
+            out["Volume"] = np.nan
+        out = out.dropna(subset=["Close"]).sort_index()
+        out.index = _naive_datetime_index(out.index)
+        out = out[out.index >= pd.Timestamp(start)]
+        return out[["Close", "Volume"]]
+    except Exception:
+        return pd.DataFrame()
+
+
+def _fetch_crypto_ohlcv(symbol: str, start: str) -> tuple[pd.DataFrame, str]:
+    df = _fetch_binance_ohlcv(symbol, start)
+    if not df.empty:
+        return df, "Binance"
+    df = _fetch_coingecko_crypto_ohlcv(symbol, start)
+    if not df.empty:
+        return df, "CoinGecko"
+    return pd.DataFrame(), "Unavailable"
+
+
 def _fetch_yfinance_ohlcv(symbol: str, start: str, end: str | None = None) -> pd.DataFrame:
     if yf is None:
         return pd.DataFrame()
@@ -479,8 +525,7 @@ def load_index_benchmark() -> tuple[pd.DataFrame, list[str]]:
 
     for label, source_type, symbol, _color in BENCHMARK_ASSETS:
         if source_type == "crypto":
-            df = _fetch_binance_ohlcv(symbol, start)
-            source = "Binance"
+            df, source = _fetch_crypto_ohlcv(symbol, start)
         else:
             df, source = _fetch_equity_ohlcv(symbol, start)
         if df.empty or df["Close"].dropna().shape[0] < 2:
@@ -534,8 +579,8 @@ def load_market_structure() -> tuple[dict[str, Any], list[str]]:
         "btc_d_source": "Unavailable",
     }
     start = (pd.Timestamp.now().normalize() - pd.Timedelta(days=30)).strftime("%Y-%m-%d")
-    btc = _fetch_binance_ohlcv("BTCUSDT", start)
-    eth = _fetch_binance_ohlcv("ETHUSDT", start)
+    btc, _btc_source = _fetch_crypto_ohlcv("BTCUSDT", start)
+    eth, _eth_source = _fetch_crypto_ohlcv("ETHUSDT", start)
     if not btc.empty and not eth.empty:
         aligned = pd.concat([eth["Close"].rename("eth"), btc["Close"].rename("btc")], axis=1).dropna()
         if len(aligned) >= 8:
@@ -590,7 +635,7 @@ def load_crypto_equity_changes() -> pd.DataFrame:
 @st.cache_data(ttl=86400, show_spinner=False)
 def load_btc_macro_ratios() -> dict[str, Any]:
     start = (pd.Timestamp.now().normalize() - pd.Timedelta(days=365 * 5 + 14)).strftime("%Y-%m-%d")
-    btc = _fetch_binance_ohlcv("BTCUSDT", start)
+    btc, btc_source = _fetch_crypto_ohlcv("BTCUSDT", start)
     if btc.empty:
         return {"data": pd.DataFrame(), "sources": {}, "errors": ["BTC price unavailable"]}
     btc_close = btc["Close"].dropna().astype(float).rename("BTC")
@@ -619,7 +664,7 @@ def load_btc_macro_ratios() -> dict[str, Any]:
             continue
         indexed = (ratio / ratio.iloc[0] * 100.0).rename(label)
         frames.append(indexed)
-        sources[label] = f"{source_label}; {source}"
+        sources[label] = f"{source_label}; BTC {btc_source}; reference {source}"
 
     if not frames:
         return {"data": pd.DataFrame(), "sources": sources, "errors": errors}
@@ -2059,6 +2104,24 @@ def _render_macro_cards(data: pd.DataFrame) -> None:
             col.caption(date_text)
 
 
+def _is_sec_access_error(error: Any) -> bool:
+    text = str(error).lower()
+    return (
+        ("sec.gov" in text or "sec ticker mapping" in text or "edgar" in text)
+        and ("403" in text or "forbidden" in text)
+    )
+
+
+def _render_compact_errors(errors: list[Any], access_caption: str | None = None) -> None:
+    access_errors = [error for error in errors if _is_sec_access_error(error)]
+    if access_errors and access_caption:
+        st.caption(access_caption)
+    for error in errors:
+        if _is_sec_access_error(error):
+            continue
+        st.warning(error)
+
+
 def _render_market_structure(data: dict[str, Any] | None = None, errors: list[str] | None = None) -> None:
     st.subheader("Market Structure")
     if data is None:
@@ -2068,8 +2131,8 @@ def _render_market_structure(data: dict[str, Any] | None = None, errors: list[st
     cols[0].metric("ETH/BTC", _format_ratio(data.get("eth_btc")), _format_pct(data.get("eth_btc_7d_pct")))
     cols[1].metric("BTC.D", f"{_num(data.get('btc_d')):.1f}%" if pd.notna(data.get("btc_d")) else "n/a")
     cols[2].metric("ETH Dominance", f"{_num(data.get('eth_d')):.1f}%" if pd.notna(data.get("eth_d")) else "n/a")
-    for error in errors:
-        st.warning(error)
+    if errors and all(pd.isna(data.get(key)) for key in ["eth_btc", "btc_d", "eth_d"]):
+        st.caption("Market-structure feeds are temporarily unavailable from this runtime.")
 
 
 def _render_token_movers(movers: dict[str, tuple[pd.DataFrame, pd.DataFrame]] | None = None) -> None:
@@ -2172,8 +2235,10 @@ def _render_hyperscaler_capex(payload: dict[str, Any] | None = None) -> None:
             payload = live_payload
             quarterly = live_quarterly
 
-    for error in payload.get("errors", []):
-        st.warning(error)
+    _render_compact_errors(
+        list(payload.get("errors", [])),
+        "SEC EDGAR live capex endpoints are currently unavailable from this runtime.",
+    )
 
     if (
         (not isinstance(quarterly, pd.DataFrame) or quarterly.empty)
@@ -2207,8 +2272,10 @@ def _render_sec_equity_events(sec_events: dict[str, Any] | None = None) -> None:
         st.info("SEC EDGAR event data is unavailable.")
         return
 
-    for error in sec_events.get("errors", []):
-        st.warning(error)
+    _render_compact_errors(
+        list(sec_events.get("errors", [])),
+        "SEC EDGAR live filing endpoints are currently unavailable from this runtime.",
+    )
 
     upcoming = sec_events.get("upcoming", pd.DataFrame())
     recent = sec_events.get("recent", pd.DataFrame())
@@ -2329,7 +2396,7 @@ def _render_cycle_indicators(cycle: pd.DataFrame | None = None) -> None:
         cycle = load_cycle_indicators()
     st.caption("Free/public mode: no paid CoinMarketCap API key. Rows with no current value are hidden.")
     if cycle.empty:
-        st.info("No current free/public cycle indicator values are available.")
+        st.caption("No current free/public cycle indicator values are available.")
         return
     st.dataframe(cycle, hide_index=True, width="stretch")
 
@@ -2401,7 +2468,7 @@ def render_macro_monitor() -> None:
         return
     st.caption(
         f"Snapshot built {snapshot_created_at.strftime('%Y-%m-%d %H:%M:%S UTC')} "
-        f"({snapshot_age:.1f}h old). Scheduled refresh: daily at 09:00 GMT."
+        f"({snapshot_age:.1f}h old). Scheduled refresh: daily at 03:15 UTC."
     )
     if snapshot_age is not None and snapshot_age > MARKET_UPDATE_MAX_AGE_HOURS:
         st.warning(
@@ -2413,14 +2480,21 @@ def render_macro_monitor() -> None:
     data = macro.get("data", pd.DataFrame())
     macro_errors = list(macro.get("errors", []))
     data, macro_errors = _live_macro_if_needed(data, macro_errors)
-    for error in macro_errors:
-        st.warning(error)
+    if macro_errors and data.empty:
+        st.caption("Live FRED feed is temporarily unavailable from this runtime.")
+    elif macro_errors:
+        st.caption("Some live FRED series are temporarily unavailable.")
 
     sec_events = _live_sec_events_if_needed(snapshot.get("sec_equity_events", {}))
     for error in snapshot.get("errors", []):
-        if str(error).startswith("Macro:") and not data.empty:
+        error_text = str(error)
+        if error_text.startswith("Macro:"):
             continue
-        if str(error).startswith("Sec Equity Events:") and not _sec_events_missing(sec_events):
+        if error_text.startswith("Sec Equity Events:") and not _sec_events_missing(sec_events):
+            continue
+        if error_text.startswith(("Benchmark:", "Market structure:")):
+            continue
+        if _is_sec_access_error(error_text):
             continue
         st.warning(error)
 
@@ -2435,8 +2509,8 @@ def render_macro_monitor() -> None:
         st.info("Benchmark data is unavailable.")
     else:
         st.plotly_chart(_benchmark_chart(benchmark), width="stretch")
-    for error in benchmark_errors:
-        st.caption(error)
+        if benchmark_errors:
+            st.caption("Some benchmark feeds are temporarily unavailable.")
 
     _render_sector_performance(snapshot.get("sector_performance", pd.DataFrame()))
     _render_token_movers(snapshot.get("token_movers", {}))
