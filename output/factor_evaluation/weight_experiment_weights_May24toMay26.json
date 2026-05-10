@@ -1,0 +1,415 @@
+{
+  "schemes": {
+    "baseline_learned_global": {
+      "fundamentals": 0.55,
+      "momentum": 0.45,
+      "flows": 0.0,
+      "factor_improvement": 0.0
+    },
+    "equal_family": {
+      "fundamentals": 0.25,
+      "momentum": 0.25,
+      "flows": 0.25,
+      "factor_improvement": 0.25
+    },
+    "shrunk_50_to_equal": {
+      "fundamentals": 0.4,
+      "momentum": 0.35,
+      "flows": 0.125,
+      "factor_improvement": 0.125
+    },
+    "shrunk_75_to_equal": {
+      "fundamentals": 0.325,
+      "momentum": 0.3,
+      "flows": 0.1875,
+      "factor_improvement": 0.1875
+    },
+    "momentum_anchored": {
+      "fundamentals": 0.2,
+      "momentum": 0.55,
+      "flows": 0.2,
+      "factor_improvement": 0.05
+    },
+    "shrunk_to_momentum_anchor": {
+      "fundamentals": 0.28750000000000003,
+      "momentum": 0.525,
+      "flows": 0.15000000000000002,
+      "factor_improvement": 0.037500000000000006
+    },
+    "train_subfold_argmax": {
+      "fundamentals": 0.3409090909090909,
+      "momentum": 0.5227272727272727,
+      "flows": 0.11363636363636363,
+      "factor_improvement": 0.022727272727272728
+    },
+    "train_stability_ir": {
+      "fundamentals": 0.2263635682919253,
+      "momentum": 0.5000582607690959,
+      "flows": 0.048922400350503464,
+      "factor_improvement": 0.22465577058847547
+    }
+  },
+  "scheme_payloads": {
+    "baseline_learned_global": {},
+    "equal_family": {},
+    "shrunk_50_to_equal": {
+      "base_weights": {
+        "fundamentals": 0.55,
+        "momentum": 0.45,
+        "flows": 0.0,
+        "factor_improvement": 0.0
+      },
+      "target_weights": {
+        "fundamentals": 0.25,
+        "momentum": 0.25,
+        "flows": 0.25,
+        "factor_improvement": 0.25
+      },
+      "shrinkage": 0.5
+    },
+    "shrunk_75_to_equal": {
+      "base_weights": {
+        "fundamentals": 0.55,
+        "momentum": 0.45,
+        "flows": 0.0,
+        "factor_improvement": 0.0
+      },
+      "target_weights": {
+        "fundamentals": 0.25,
+        "momentum": 0.25,
+        "flows": 0.25,
+        "factor_improvement": 0.25
+      },
+      "shrinkage": 0.75
+    },
+    "momentum_anchored": {},
+    "shrunk_to_momentum_anchor": {
+      "base_weights": {
+        "fundamentals": 0.55,
+        "momentum": 0.45,
+        "flows": 0.0,
+        "factor_improvement": 0.0
+      },
+      "target_weights": {
+        "fundamentals": 0.2,
+        "momentum": 0.55,
+        "flows": 0.2,
+        "factor_improvement": 0.05
+      },
+      "shrinkage": 0.75
+    },
+    "train_subfold_argmax": {
+      "weights": {
+        "fundamentals": 0.3409090909090909,
+        "momentum": 0.5227272727272727,
+        "flows": 0.11363636363636363,
+        "factor_improvement": 0.022727272727272728
+      },
+      "subfold_weights": [
+        {
+          "subfold": "train_subfold_1",
+          "start": "2024-05-01 00:00:00",
+          "end": "2024-07-31 00:00:00",
+          "n_dates": 92,
+          "weight_fundamentals": 0.2,
+          "weight_momentum": 0.6000000000000001,
+          "weight_flows": 0.2,
+          "weight_factor_improvement": 0.0
+        },
+        {
+          "subfold": "train_subfold_2",
+          "start": "2024-08-01 00:00:00",
+          "end": "2024-10-30 00:00:00",
+          "n_dates": 91,
+          "weight_fundamentals": 0.45,
+          "weight_momentum": 0.55,
+          "weight_flows": 0.0,
+          "weight_factor_improvement": 0.0
+        },
+        {
+          "subfold": "train_subfold_3",
+          "start": "2024-10-31 00:00:00",
+          "end": "2025-01-29 00:00:00",
+          "n_dates": 91,
+          "weight_fundamentals": 0.30000000000000004,
+          "weight_momentum": 0.6000000000000001,
+          "weight_flows": 0.05,
+          "weight_factor_improvement": 0.05
+        },
+        {
+          "subfold": "train_subfold_4",
+          "start": "2025-01-30 00:00:00",
+          "end": "2025-04-30 00:00:00",
+          "n_dates": 91,
+          "weight_fundamentals": 0.6000000000000001,
+          "weight_momentum": 0.1,
+          "weight_flows": 0.25,
+          "weight_factor_improvement": 0.05
+        }
+      ]
+    },
+    "train_stability_ir": {
+      "weights": {
+        "fundamentals": 0.22636356829192528,
+        "momentum": 0.5000582607690958,
+        "flows": 0.04892240035050346,
+        "factor_improvement": 0.22465577058847544
+      },
+      "train_subfold_ic": [
+        {
+          "family": "fundamentals",
+          "fold_start": "2024-05-01 00:00:00",
+          "mean_ic": 0.03006565451737473,
+          "n": 92
+        },
+        {
+          "family": "momentum",
+          "fold_start": "2024-05-01 00:00:00",
+          "mean_ic": 0.11398871445542022,
+          "n": 92
+        },
+        {
+          "family": "flows",
+          "fold_start": "2024-05-01 00:00:00",
+          "mean_ic": -0.04698086328352851,
+          "n": 92
+        },
+        {
+          "family": "factor_improvement",
+          "fold_start": "2024-05-01 00:00:00",
+          "mean_ic": 0.057126934880924976,
+          "n": 92
+        },
+        {
+          "family": "fundamentals",
+          "fold_start": "2024-08-01 00:00:00",
+          "mean_ic": 0.07393594988757538,
+          "n": 91
+        },
+        {
+          "family": "momentum",
+          "fold_start": "2024-08-01 00:00:00",
+          "mean_ic": 0.053280293126246304,
+          "n": 91
+        },
+        {
+          "family": "flows",
+          "fold_start": "2024-08-01 00:00:00",
+          "mean_ic": 0.07459145601560462,
+          "n": 91
+        },
+        {
+          "family": "factor_improvement",
+          "fold_start": "2024-08-01 00:00:00",
+          "mean_ic": 0.01587974800563337,
+          "n": 91
+        },
+        {
+          "family": "fundamentals",
+          "fold_start": "2024-10-31 00:00:00",
+          "mean_ic": 0.0005141041965114184,
+          "n": 91
+        },
+        {
+          "family": "momentum",
+          "fold_start": "2024-10-31 00:00:00",
+          "mean_ic": 0.1297823560624671,
+          "n": 91
+        },
+        {
+          "family": "flows",
+          "fold_start": "2024-10-31 00:00:00",
+          "mean_ic": -0.07216127013446398,
+          "n": 91
+        },
+        {
+          "family": "factor_improvement",
+          "fold_start": "2024-10-31 00:00:00",
+          "mean_ic": 0.048623242605706635,
+          "n": 91
+        },
+        {
+          "family": "fundamentals",
+          "fold_start": "2025-01-30 00:00:00",
+          "mean_ic": 0.08185247791154505,
+          "n": 91
+        },
+        {
+          "family": "momentum",
+          "fold_start": "2025-01-30 00:00:00",
+          "mean_ic": 0.07708764525835128,
+          "n": 91
+        },
+        {
+          "family": "flows",
+          "fold_start": "2025-01-30 00:00:00",
+          "mean_ic": 0.09411085808601338,
+          "n": 91
+        },
+        {
+          "family": "factor_improvement",
+          "fold_start": "2025-01-30 00:00:00",
+          "mean_ic": 0.0031563149213409292,
+          "n": 91
+        }
+      ]
+    }
+  },
+  "train_subfold_argmax": {
+    "weights": {
+      "fundamentals": 0.3409090909090909,
+      "momentum": 0.5227272727272727,
+      "flows": 0.11363636363636363,
+      "factor_improvement": 0.022727272727272728
+    },
+    "subfold_weights": [
+      {
+        "subfold": "train_subfold_1",
+        "start": "2024-05-01 00:00:00",
+        "end": "2024-07-31 00:00:00",
+        "n_dates": 92,
+        "weight_fundamentals": 0.2,
+        "weight_momentum": 0.6000000000000001,
+        "weight_flows": 0.2,
+        "weight_factor_improvement": 0.0
+      },
+      {
+        "subfold": "train_subfold_2",
+        "start": "2024-08-01 00:00:00",
+        "end": "2024-10-30 00:00:00",
+        "n_dates": 91,
+        "weight_fundamentals": 0.45,
+        "weight_momentum": 0.55,
+        "weight_flows": 0.0,
+        "weight_factor_improvement": 0.0
+      },
+      {
+        "subfold": "train_subfold_3",
+        "start": "2024-10-31 00:00:00",
+        "end": "2025-01-29 00:00:00",
+        "n_dates": 91,
+        "weight_fundamentals": 0.30000000000000004,
+        "weight_momentum": 0.6000000000000001,
+        "weight_flows": 0.05,
+        "weight_factor_improvement": 0.05
+      },
+      {
+        "subfold": "train_subfold_4",
+        "start": "2025-01-30 00:00:00",
+        "end": "2025-04-30 00:00:00",
+        "n_dates": 91,
+        "weight_fundamentals": 0.6000000000000001,
+        "weight_momentum": 0.1,
+        "weight_flows": 0.25,
+        "weight_factor_improvement": 0.05
+      }
+    ]
+  },
+  "train_subfold_ic": [
+    {
+      "family": "fundamentals",
+      "fold_start": "2024-05-01 00:00:00",
+      "mean_ic": 0.03006565451737473,
+      "n": 92
+    },
+    {
+      "family": "momentum",
+      "fold_start": "2024-05-01 00:00:00",
+      "mean_ic": 0.11398871445542022,
+      "n": 92
+    },
+    {
+      "family": "flows",
+      "fold_start": "2024-05-01 00:00:00",
+      "mean_ic": -0.04698086328352851,
+      "n": 92
+    },
+    {
+      "family": "factor_improvement",
+      "fold_start": "2024-05-01 00:00:00",
+      "mean_ic": 0.057126934880924976,
+      "n": 92
+    },
+    {
+      "family": "fundamentals",
+      "fold_start": "2024-08-01 00:00:00",
+      "mean_ic": 0.07393594988757538,
+      "n": 91
+    },
+    {
+      "family": "momentum",
+      "fold_start": "2024-08-01 00:00:00",
+      "mean_ic": 0.053280293126246304,
+      "n": 91
+    },
+    {
+      "family": "flows",
+      "fold_start": "2024-08-01 00:00:00",
+      "mean_ic": 0.07459145601560462,
+      "n": 91
+    },
+    {
+      "family": "factor_improvement",
+      "fold_start": "2024-08-01 00:00:00",
+      "mean_ic": 0.01587974800563337,
+      "n": 91
+    },
+    {
+      "family": "fundamentals",
+      "fold_start": "2024-10-31 00:00:00",
+      "mean_ic": 0.0005141041965114184,
+      "n": 91
+    },
+    {
+      "family": "momentum",
+      "fold_start": "2024-10-31 00:00:00",
+      "mean_ic": 0.1297823560624671,
+      "n": 91
+    },
+    {
+      "family": "flows",
+      "fold_start": "2024-10-31 00:00:00",
+      "mean_ic": -0.07216127013446398,
+      "n": 91
+    },
+    {
+      "family": "factor_improvement",
+      "fold_start": "2024-10-31 00:00:00",
+      "mean_ic": 0.048623242605706635,
+      "n": 91
+    },
+    {
+      "family": "fundamentals",
+      "fold_start": "2025-01-30 00:00:00",
+      "mean_ic": 0.08185247791154505,
+      "n": 91
+    },
+    {
+      "family": "momentum",
+      "fold_start": "2025-01-30 00:00:00",
+      "mean_ic": 0.07708764525835128,
+      "n": 91
+    },
+    {
+      "family": "flows",
+      "fold_start": "2025-01-30 00:00:00",
+      "mean_ic": 0.09411085808601338,
+      "n": 91
+    },
+    {
+      "family": "factor_improvement",
+      "fold_start": "2025-01-30 00:00:00",
+      "mean_ic": 0.0031563149213409292,
+      "n": 91
+    }
+  ],
+  "train_stability_ir_weights": {
+    "fundamentals": 0.22636356829192528,
+    "momentum": 0.5000582607690958,
+    "flows": 0.04892240035050346,
+    "factor_improvement": 0.22465577058847544
+  },
+  "primary_horizon": 14,
+  "variant": "sticky_l_s",
+  "eligible_universe": "eligible_sensitivity"
+}

@@ -10,6 +10,7 @@ Usage:
 """
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from datetime import date, timedelta
 from pathlib import Path
@@ -220,6 +221,25 @@ FACTOR_FAMILY_CONFIG_KEYS = {
 FACTOR_LAG_COLUMNS = {
     score_col: f"{score_col}_lag_{FACTOR_LAG_DAYS}d"
     for score_col in FACTOR_FAMILIES
+}
+
+FACTOR_RESEARCH_NAME = "May24toMay26"
+FACTOR_RESEARCH_OUTPUT_DIR = PROJECT_ROOT / "output" / "factor_evaluation"
+FACTOR_RESEARCH_NOTEBOOK_PATH = PROJECT_ROOT / "notebooks" / f"factor_model_walkforward_{FACTOR_RESEARCH_NAME}.ipynb"
+FACTOR_RESEARCH_NOTEBOOK_TITLE = f"{FACTOR_RESEARCH_NAME} Factor Research (WIP)"
+FACTOR_RESEARCH_NOTEBOOK_URL = os.getenv(
+    "FACTOR_RESEARCH_NOTEBOOK_URL",
+    f"https://github.com/asad-h/crypto-factor-app/blob/main/notebooks/factor_model_walkforward_{FACTOR_RESEARCH_NAME}.ipynb",
+)
+FACTOR_RESEARCH_FILES = {
+    "plain_english": FACTOR_RESEARCH_OUTPUT_DIR / f"factor_model_walkforward_{FACTOR_RESEARCH_NAME}_plain_english_writeup.md",
+    "next_steps": FACTOR_RESEARCH_OUTPUT_DIR / f"next_steps_{FACTOR_RESEARCH_NAME}.md",
+    "fundamentals_ic": FACTOR_RESEARCH_OUTPUT_DIR / f"fundamentals_redef_ic_{FACTOR_RESEARCH_NAME}.csv",
+    "weights": FACTOR_RESEARCH_OUTPUT_DIR / f"weight_experiment_summary_{FACTOR_RESEARCH_NAME}.csv",
+    "regime": FACTOR_RESEARCH_OUTPUT_DIR / f"regime_stratified_folds_{FACTOR_RESEARCH_NAME}.csv",
+    "validation": FACTOR_RESEARCH_OUTPUT_DIR / f"validation_model_selection_{FACTOR_RESEARCH_NAME}.csv",
+    "test": FACTOR_RESEARCH_OUTPUT_DIR / f"untouched_test_results_{FACTOR_RESEARCH_NAME}.csv",
+    "selected": FACTOR_RESEARCH_OUTPUT_DIR / f"selected_model_{FACTOR_RESEARCH_NAME}.json",
 }
 
 AXIS_OPTIONS = {
@@ -572,6 +592,12 @@ def format_number(value: Any) -> str:
     return f"{float(value):+.2f}"
 
 
+def format_return(value: Any) -> str:
+    if pd.isna(value):
+        return "n/a"
+    return f"{float(value) * 100:+.1f}%"
+
+
 def slugify(value: Any) -> str:
     text = str(value or "").lower()
     return "".join(ch if ch.isalnum() else "-" for ch in text).strip("-").replace("--", "-")
@@ -605,6 +631,56 @@ def project_source_links(row: pd.Series) -> str:
 def screener_cache_signature() -> tuple[tuple[str, int], ...]:
     paths = [SNAPSHOT_PATH, PROJECT_TS_PATH, SUMMARY_TS_PATH, FACTOR_SCORES_PATH, FACTOR_BASKETS_PATH]
     return tuple((path.name, path.stat().st_mtime_ns if path.exists() else 0) for path in paths)
+
+
+def factor_research_signature() -> tuple[tuple[str, int], ...]:
+    paths = [FACTOR_RESEARCH_NOTEBOOK_PATH, *FACTOR_RESEARCH_FILES.values()]
+    return tuple((path.name, path.stat().st_mtime_ns if path.exists() else 0) for path in paths)
+
+
+def _read_json(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text())
+    except Exception:
+        return {}
+
+
+def _read_csv(path: Path) -> pd.DataFrame:
+    if not path.exists():
+        return pd.DataFrame()
+    try:
+        return pd.read_csv(path)
+    except Exception:
+        return pd.DataFrame()
+
+
+def _read_text(path: Path) -> str:
+    if not path.exists():
+        return ""
+    try:
+        return path.read_text()
+    except Exception:
+        return ""
+
+
+@st.cache_data(show_spinner=False)
+def _load_factor_research_cached(signature: tuple[tuple[str, int], ...]) -> dict[str, Any]:
+    return {
+        "selected": _read_json(FACTOR_RESEARCH_FILES["selected"]),
+        "plain_english": _read_text(FACTOR_RESEARCH_FILES["plain_english"]),
+        "next_steps": _read_text(FACTOR_RESEARCH_FILES["next_steps"]),
+        "fundamentals_ic": _read_csv(FACTOR_RESEARCH_FILES["fundamentals_ic"]),
+        "weights": _read_csv(FACTOR_RESEARCH_FILES["weights"]),
+        "regime": _read_csv(FACTOR_RESEARCH_FILES["regime"]),
+        "validation": _read_csv(FACTOR_RESEARCH_FILES["validation"]),
+        "test": _read_csv(FACTOR_RESEARCH_FILES["test"]),
+    }
+
+
+def load_factor_research() -> dict[str, Any]:
+    return _load_factor_research_cached(factor_research_signature())
 
 
 def _lagged_factor_snapshot(factor_scores: pd.DataFrame) -> pd.DataFrame:
@@ -3007,6 +3083,206 @@ def render_factor_index(df: pd.DataFrame) -> None:
     st.plotly_chart(fig, width="stretch")
 
 
+def _stable_fundamentals_table(research: dict[str, Any]) -> pd.DataFrame:
+    ic = research.get("fundamentals_ic", pd.DataFrame())
+    if ic.empty or not {"signal", "period", "mean_ic"}.issubset(ic.columns):
+        return pd.DataFrame()
+    flags = ic.groupby("signal", observed=True).agg(
+        Stable=("positive_all_windows_and_fold2", "max"),
+        Min_Decision_IC=("min_train_validation_fold2_ic", "max"),
+    )
+    pivot = ic.pivot_table(index="signal", columns="period", values="mean_ic", aggfunc="mean")
+    cols = [col for col in ["Train", "Validation", "Test", "fold_2"] if col in pivot]
+    out = flags.join(pivot[cols], how="left").reset_index()
+    out = out[out["Stable"].astype(bool)].sort_values("Min_Decision_IC", ascending=False)
+    return out.rename(
+        columns={
+            "signal": "Signal",
+            "Min_Decision_IC": "Min Train/Validation/fold_2 IC",
+            "fold_2": "Mixed fold IC",
+        }
+    )
+
+
+def _weight_experiment_validation_table(research: dict[str, Any]) -> pd.DataFrame:
+    weights = research.get("weights", pd.DataFrame())
+    if weights.empty or "period" not in weights:
+        return pd.DataFrame()
+    validation = weights[weights["period"].eq("Validation")].copy()
+    if validation.empty:
+        return pd.DataFrame()
+    cols = [
+        "scheme",
+        "total_return",
+        "sharpe",
+        "fold_retrained_rolling_positive_folds",
+        "fold_retrained_rolling_avg_total_return",
+        "would_clear_strict_gate_no_leakage",
+    ]
+    validation = validation[[col for col in cols if col in validation]]
+    return validation.rename(
+        columns={
+            "scheme": "Scheme",
+            "total_return": "Validation return",
+            "sharpe": "Validation Sharpe",
+            "fold_retrained_rolling_positive_folds": "Positive fold-retrained folds",
+            "fold_retrained_rolling_avg_total_return": "Rolling avg return",
+            "would_clear_strict_gate_no_leakage": "Clears no-leakage gate",
+        }
+    )
+
+
+def _selected_validation_row(research: dict[str, Any]) -> pd.Series:
+    validation = research.get("validation", pd.DataFrame())
+    selected = research.get("selected", {})
+    if validation.empty or not selected:
+        return pd.Series(dtype=object)
+    mask = (
+        validation.get("model", pd.Series(index=validation.index, dtype=object)).eq(selected.get("selected_model"))
+        & validation.get("variant", pd.Series(index=validation.index, dtype=object)).eq(selected.get("selected_variant"))
+        & validation.get("eligible_universe", pd.Series(index=validation.index, dtype=object)).eq(selected.get("selected_eligible_universe"))
+        & validation.get("horizon", pd.Series(index=validation.index, dtype=float)).eq(selected.get("primary_horizon", 14))
+    )
+    if not mask.any():
+        return pd.Series(dtype=object)
+    return validation[mask].iloc[0]
+
+
+def _selected_test_row(research: dict[str, Any]) -> pd.Series:
+    test = research.get("test", pd.DataFrame())
+    selected = research.get("selected", {})
+    if test.empty or not selected:
+        return pd.Series(dtype=object)
+    mask = test.get("horizon", pd.Series(index=test.index, dtype=float)).eq(selected.get("primary_horizon", 14))
+    if "model" in test:
+        mask &= test["model"].eq(selected.get("selected_model"))
+    if "variant" in test:
+        mask &= test["variant"].eq(selected.get("selected_variant"))
+    if not mask.any():
+        return pd.Series(dtype=object)
+    return test[mask].iloc[0]
+
+
+def render_factor_research_wip() -> None:
+    research = load_factor_research()
+    selected = research.get("selected", {})
+    selected_val = _selected_validation_row(research)
+    selected_test = _selected_test_row(research)
+    stable = _stable_fundamentals_table(research)
+    weight_validation = _weight_experiment_validation_table(research)
+
+    st.markdown(
+        '<div class="hero-card"><h3>May24toMay26 Factor Research (WIP)</h3>'
+        '<p>Research notebook and audit-facing diagnostics. Production factor rankings are unchanged.</p></div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        f"[{FACTOR_RESEARCH_NOTEBOOK_TITLE}]({FACTOR_RESEARCH_NOTEBOOK_URL})",
+    )
+    st.caption("Opens the executed research notebook in the repository. Use the download button if the hosted notebook link is unavailable.")
+    if FACTOR_RESEARCH_NOTEBOOK_PATH.exists():
+        st.download_button(
+            "Download notebook",
+            data=FACTOR_RESEARCH_NOTEBOOK_PATH.read_bytes(),
+            file_name=f"factor_model_walkforward_{FACTOR_RESEARCH_NAME}_WIP.ipynb",
+            mime="application/x-ipynb+json",
+        )
+
+    st.info(
+        "Plain English: the latest research improved the audit trail and found better candidate fundamentals signals, "
+        "but it did not approve a new production factor model. The dashboard factors shown elsewhere still use the existing production inputs."
+    )
+
+    status = selected.get("selection_status", "Unknown")
+    strict_pass = bool(selected.get("strict_gate_passed", False))
+    stable_count = int(len(stable)) if not stable.empty else 0
+    clears = 0
+    if not weight_validation.empty and "Clears no-leakage gate" in weight_validation:
+        clears = int(weight_validation["Clears no-leakage gate"].fillna(False).astype(bool).sum())
+    regime_pass = selected_val.get("passes_regime_stratified_gate", pd.NA) if not selected_val.empty else pd.NA
+    beta_share = pd.NA
+    if not selected_test.empty and pd.notna(selected_test.get("total_return")) and float(selected_test.get("total_return")) != 0:
+        beta_share = float(selected_test.get("beta_attributed_return", 0.0)) / float(selected_test.get("total_return"))
+
+    c1, c2, c3, c4, c5 = st.columns(5)
+    c1.metric("Selection status", "Strict pass" if strict_pass else status.replace("_", " ").title())
+    c2.metric("Stable new signals", str(stable_count), "not active yet")
+    c3.metric("Weight schemes cleared", str(clears))
+    c4.metric("Regime sub-gate", "Pass" if bool(regime_pass) else "Fail")
+    c5.metric("Test beta share", "n/a" if pd.isna(beta_share) else f"{beta_share:.1%}")
+
+    with st.expander("Plain-English companion", expanded=True):
+        text = research.get("plain_english") or research.get("next_steps") or "Plain-English note is unavailable in this deployment."
+        st.markdown(text)
+
+    with st.expander("Stable fundamentals candidates", expanded=True):
+        if stable.empty:
+            st.info("No stable fundamentals redefinition table is available.")
+        else:
+            st.caption("These are research candidates only. They are not yet blended into the production screener scores.")
+            st.dataframe(
+                stable,
+                hide_index=True,
+                width="stretch",
+                column_config={
+                    "Train": st.column_config.NumberColumn("Train IC", format="%.4f"),
+                    "Validation": st.column_config.NumberColumn("Validation IC", format="%.4f"),
+                    "Test": st.column_config.NumberColumn("Test IC", format="%.4f"),
+                    "Mixed fold IC": st.column_config.NumberColumn("Mixed fold IC", format="%.4f"),
+                    "Min Train/Validation/fold_2 IC": st.column_config.NumberColumn("Min decision IC", format="%.4f"),
+                },
+            )
+
+    with st.expander("Weight robustness and validation gates", expanded=True):
+        if weight_validation.empty:
+            st.info("Weight experiment summary is unavailable.")
+        else:
+            st.caption("Gate checks use validation and fold-retrained rolling evidence only, not test labels.")
+            st.dataframe(
+                weight_validation,
+                hide_index=True,
+                width="stretch",
+                column_config={
+                    "Validation return": st.column_config.NumberColumn("Validation return", format="%.1%"),
+                    "Validation Sharpe": st.column_config.NumberColumn("Validation Sharpe", format="%.2f"),
+                    "Rolling avg return": st.column_config.NumberColumn("Rolling avg return", format="%.1%"),
+                },
+            )
+
+    with st.expander("Selected diagnostic basket: beta and regime checks", expanded=True):
+        if selected_val.empty or selected_test.empty:
+            st.info("Selected basket diagnostics are unavailable.")
+        else:
+            diagnostic = pd.DataFrame(
+                [
+                    {
+                        "Model": selected.get("selected_model"),
+                        "Variant": selected.get("selected_variant"),
+                        "Universe": selected.get("selected_eligible_universe"),
+                        "Validation return": selected_val.get("total_return"),
+                        "Validation Sharpe": selected_val.get("sharpe"),
+                        "Positive rolling folds": selected_val.get("rolling_positive_folds"),
+                        "Regime sub-gate": bool(selected_val.get("passes_regime_stratified_gate", False)),
+                        "Test return": selected_test.get("total_return"),
+                        "Beta-attributed return": selected_test.get("beta_attributed_return"),
+                        "Dispersion alpha": selected_test.get("dispersion_alpha"),
+                    }
+                ]
+            )
+            st.dataframe(
+                diagnostic,
+                hide_index=True,
+                width="stretch",
+                column_config={
+                    "Validation return": st.column_config.NumberColumn("Validation return", format="%.1%"),
+                    "Validation Sharpe": st.column_config.NumberColumn("Validation Sharpe", format="%.2f"),
+                    "Test return": st.column_config.NumberColumn("Test return", format="%.1%"),
+                    "Beta-attributed return": st.column_config.NumberColumn("Beta-attributed return", format="%.1%"),
+                    "Dispersion alpha": st.column_config.NumberColumn("Dispersion alpha", format="%.1%"),
+                },
+            )
+
+
 def render_factor_aggregation_info() -> None:
     active_total = sum(FAMILY_WEIGHTS.get(key, 0.0) for key in FACTOR_FAMILY_CONFIG_KEYS.values())
     rows = []
@@ -3269,12 +3545,13 @@ def main() -> None:
     df = load_projects()
 
     page_header()
-    summary_tab, screener_tab, project_tab, factors_tab, signal_tab, market_tab, quality_tab, dictionary_tab = st.tabs(
+    summary_tab, screener_tab, project_tab, factors_tab, research_tab, signal_tab, market_tab, quality_tab, dictionary_tab = st.tabs(
         [
             "Executive Summary",
             "Screener",
             "Project Detail",
             "Factor Screener",
+            "Factor Research WIP",
             "Signal Detail",
             "Macro Signals",
             "Data Quality",
@@ -3294,6 +3571,9 @@ def main() -> None:
 
     with factors_tab:
         render_factors(df)
+
+    with research_tab:
+        render_factor_research_wip()
 
     with signal_tab:
         render_signal_detail(df)

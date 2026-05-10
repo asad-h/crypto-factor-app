@@ -5,7 +5,15 @@
 __pycache__/
 *.py[cod]
 logs/
-output/
+output/*
+!output/
+!output/factor_evaluation/
+output/factor_evaluation/*
+!output/factor_evaluation/fundamentals_redef_ic_May24toMay26.csv
+!output/factor_evaluation/next_steps_May24toMay26.md
+!output/factor_evaluation/regime_stratified_folds_May24toMay26.csv
+!output/factor_evaluation/weight_experiment_summary_May24toMay26.csv
+!output/factor_evaluation/weight_experiment_weights_May24toMay26.json
 *.pdf
 defillama-api*.json
 

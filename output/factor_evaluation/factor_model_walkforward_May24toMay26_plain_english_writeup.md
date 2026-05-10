@@ -37,6 +37,21 @@ The latest run made four changes:
 - The selector now requires positive validation return, positive validation Sharpe, positive average rolling-fold return, and at least 3 positive rolling folds.
 - A sticky L/S variant was added to reduce short-basket churn by keeping prior shorts if they remain near the bottom ranks.
 
+## WIP Research Update
+
+The latest WIP research adds diagnostics and candidate research signals, but it does not change the production dashboard factors yet.
+
+In plain English:
+
+- The research found three better-behaved fundamentals candidates: `tvl_chg_8w`, `trading_fees_chg_4w`, and `revenue_chg_4w`.
+- These candidates are promising because they look at changes in fundamentals rather than stale absolute levels.
+- They are research-only for now. They are not used in the online factor screener rankings yet.
+- The new weight-robustness sweep did not find a no-leakage scheme that clears validation and rolling gates.
+- The new regime-stratified check also rejects the diagnostic basket, especially in the mixed bullish/bearish fold.
+- The test result now shows beta-attributed return and dispersion alpha separately, so future readers can see how much came from BTC-direction exposure.
+
+Bottom line: this is useful research progress, but not a production promotion.
+
 ## Fixed Split Versus Rolling Folds
 
 The notebook still keeps the final untouched test period separate:
